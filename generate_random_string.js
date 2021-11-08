@@ -1,9 +1,13 @@
 const generateRandomChar = () => {
-  const randomFloat = Math.random() * 36;
+  const numOfPossibleChar = 62; // 10 (0-9 digits) + 26 (26 letters in capital) + 26 (26 letters in lower case)
+  const randomFloat = Math.random() * numOfPossibleChar;
   const randomInt = Math.floor(randomFloat);
-  const randomIntIsBelowTen = randomInt < 10;
-  if (randomIntIsBelowTen) return randomInt;
-  const charCode = randomInt + 87;
+  const randomIntIsBelow10 = randomInt < 10;
+  if (randomIntIsBelow10) return randomInt;
+  const randomIntIsBelow36 = randomInt < 36;
+  let charCode = randomInt;
+  if (randomIntIsBelow36) charCode += 55; //charCode of "A" is 65, 65 - 10 = 55
+  if (!randomIntIsBelow36) charCode += 61; //charCode of "a" is 97, 97 - 36 = 61
   const randomLetter = String.fromCharCode(charCode);
   return randomLetter;
 };
