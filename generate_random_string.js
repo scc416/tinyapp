@@ -6,7 +6,7 @@ const generateRandomChar = () => {
   const charCode = randomInt + 87;
   const randomLetter = String.fromCharCode(charCode);
   return randomLetter;
-}
+};
 
 const generateRandomString = () => {
   let randomString = "";
