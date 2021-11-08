@@ -1,13 +1,28 @@
-<header>
-  <nav class="navbar navbar-expand-md navbar-dark bg-success">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
     <a class="navbar-brand" href="/urls">TinyApp</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
         <a class="nav-item nav-link" href="/urls">My URLs</a>
+        </li>
+        <li class="nav-item active">
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+      </li>
+    </ul>
+        <!-- <form class="form-inline" action="/login" method="POST">
+          <div class="form-group mb-2">
+            
+            <input class="form-control" type="text" name="username" style="width: 300px; margin: 1em">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
+        </form> -->
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Username" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign in</button>
+        </form>
       </div>
     </div>
   </nav>
