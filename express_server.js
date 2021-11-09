@@ -22,10 +22,10 @@ const checkIfEmailIsRegistered = (newEmail) => {
     const userInfo = users[user];
     const email = userInfo.email;
     const emailIsRegistered = newEmail === email;
-    if(emailIsRegistered) return true;
+    if (emailIsRegistered) return true;
   }
   return false;
-}
+};
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -67,7 +67,7 @@ const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
       if (passwordIsCorrect) return userId;
     }
   }
-}
+};
 
 app.post("/login", (req, res) => {
   const email = req.body.email;
