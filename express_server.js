@@ -11,11 +11,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: {
+      longURL: "https://www.tsn.ca",
+      userID: "aJ48lW"
+  },
+  i3BoGr: {
+      longURL: "https://www.google.ca",
+      userID: "aJ48lW"
+  }
 };
 
-const users = {};
+const users = {
+  "aJ48lW" : {
+    id: "aJ48lW",
+    email: "siu@gmail.com",
+    password: "123456"
+  }
+};
 
 const checkIfEmailIsRegistered = (newEmail) => {
   for (const user in users) {
@@ -95,9 +107,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
+  const userId = req.cookies.user_id;
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL] = { userId, longURL };
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -131,7 +144,7 @@ app.get("/register", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL];
+  const longURL = urlDatabase[shortURL].longURL;
   const userId = req.cookies.user_id;
   const userInfo = users[userId];
   const templateVars = { longURL, shortURL, userInfo };
@@ -140,7 +153,7 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL];
+  const longURL = urlDatabase[shortURL].longURL;
   res.redirect(longURL);
 });
 
@@ -149,7 +162,7 @@ app.post("/urls", (req, res) => {
   if (!userId) return res.status(401).send('Log in to create new url.');
   const longURL = req.body.longURL;
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL] = { longURL, userId };
   res.redirect(`/urls/${shortURL}`);
 });
 
