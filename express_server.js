@@ -48,6 +48,7 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   const userId = req.cookies.user_id;
+  if (!userId) return res.redirect("/login");
   const userInfo = users[userId];
   const templateVars = { userInfo };
   res.render("urls_new", templateVars);
@@ -144,6 +145,8 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
+  const userId = req.cookies.user_id;
+  if (!userId) return res.status(401).send('Log in to create new url.');
   const longURL = req.body.longURL;
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = longURL;
