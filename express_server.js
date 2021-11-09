@@ -17,6 +17,15 @@ const urlDatabase = {
 
 const users = {};
 
+const checkIfEmailIsRegistered = (newEmail) => {
+  for (const user in users) {
+    const userInfo = users[user];
+    const email = userInfo.email;
+    const emailIsRegistered = newEmail === email;
+    if(emailIsRegistered) return true;
+  }
+  return false;
+}
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -71,6 +80,12 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const emailIsEmpty = email === "";
+  if (emailIsEmpty) return res.status(400).send('Email address cannot be empty.');
+  const passwordIsEmpty = password === "";
+  if (passwordIsEmpty) return res.status(400).send('Password cannot be empty.');
+  const emailIsRegistered = checkIfEmailIsRegistered(email);
+  if (emailIsRegistered) return res.status(400).send('The email address is already registered.');
   const id = generateRandomString();
   const userInfo = { id, email, password };
   users[id] = userInfo;
