@@ -82,8 +82,8 @@ app.post("/login", (req, res) => {
 
 app.get("/login", (req, res) => {
   const userId = req.cookies.user_id;
-  const userInfo = users[userId];
-  const templateVars = { userInfo };
+  if (userId) res.redirect("/urls");
+  const templateVars = { userInfo: null };
   res.render("urls_login", templateVars);
 });
 
@@ -123,8 +123,8 @@ app.post("/register", (req, res) => {
 
 app.get("/register", (req, res) => {
   const userId = req.cookies.user_id;
-  const userInfo = users[userId];
-  const templateVars = { userInfo };
+  if (userId) res.redirect("/urls");
+  const templateVars = { userInfo: null };
   res.render("urls_register", templateVars);
 });
 
