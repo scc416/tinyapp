@@ -13,20 +13,34 @@ app.set("view engine", "ejs");
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://www.tsn.ca",
-    userID: "aJ48lW"
+    userId: "aJ48lW"
   },
   i3BoGr: {
     longURL: "https://www.google.ca",
-    userID: "aJ48lW"
+    userId: "aJ48lW"
   }
 };
 
 const users = {
   "aJ48lW" : {
     id: "aJ48lW",
-    email: "siu@gmail.com",
+    email: "siu@protonmail.com",
     password: "123456"
   }
+};
+
+const getUrlsOfAnUser = (id) => {
+  const urls = {};
+  for (const shortURL in urlDatabase) {
+    const urlInfo = urlDatabase[shortURL];
+    const urlUserId = urlInfo.userId;
+    const urlBelongsToUser = urlUserId === id;
+    if (urlBelongsToUser) {
+      const longURL = urlInfo.longURL;
+      urls[shortURL] = longURL;
+    }
+  }
+  return urls;
 };
 
 const checkIfEmailIsRegistered = (newEmail) => {
@@ -53,8 +67,10 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const userId = req.cookies.user_id;
+  if (!userId) return res.status(403).send("Login to see your shorten URLs.");
   const userInfo = users[userId];
-  const templateVars = { urls: urlDatabase, userInfo };
+  const urlsOfTheUser = getUrlsOfAnUser(userId);
+  const templateVars = { urls: urlsOfTheUser, userInfo };
   res.render("urls_index", templateVars);
 });
 
@@ -102,13 +118,24 @@ app.get("/login", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
+  const userId = req.cookies.user_id;
+  if (!userId) return res.status(403).send("You have to login to delete url.");
+  const urlInfo = urlDatabase[shortURL];
+  const urlUserId = urlInfo.userId;
+  const urlBelongsToUser = userId === urlUserId;
+  if (!urlBelongsToUser) return res.status(403).send("You cannot delete url of another user.");
   delete urlDatabase[shortURL];
   res.redirect("/urls/");
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
   const userId = req.cookies.user_id;
+  if (!userId) return res.status(403).send("You have to login to edit url.");
   const shortURL = req.params.shortURL;
+  const urlInfo = urlDatabase[shortURL];
+  const urlUserId = urlInfo.userId;
+  const urlBelongsToUser = userId === urlUserId;
+  if (!urlBelongsToUser) return res.status(403).send("You cannot edit url of another user.");
   const longURL = req.body.longURL;
   urlDatabase[shortURL] = { userId, longURL };
   res.redirect(`/urls/${shortURL}`);
@@ -143,10 +170,16 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL].longURL;
   const userId = req.cookies.user_id;
+  if (!userId) return res.status(403).send("You have to login to edit url.");
+  const shortURL = req.params.shortURL;
+  const urlInfo = urlDatabase[shortURL];
+  if (!urlInfo) return res.status(404).send("The short url does not exist.");
+  const urlUserId = urlInfo.userId;
+  const urlBelongsToUser = userId === urlUserId;
+  if (!urlBelongsToUser) return res.status(403).send("You cannot edit url of another user.");
   const userInfo = users[userId];
+  const longURL = req.body.longURL;
   const templateVars = { longURL, shortURL, userInfo };
   res.render("urls_show", templateVars);
 });
@@ -159,7 +192,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const userId = req.cookies.user_id;
-  if (!userId) return res.status(401).send('Log in to create new url.');
+  if (!userId) return res.status(403).send('Log in to create new url.');
   const longURL = req.body.longURL;
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = { longURL, userId };
