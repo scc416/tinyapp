@@ -53,10 +53,36 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
+  const userIds = Object.keys(users);
+  const usersNum = userIds.length;
+  for (let i = 0; i < usersNum; i++) {
+    const userId = userIds[i];
+    const userInfo = users[userId];
+    const email = userInfo.email;
+    const emailIsFound = email === enteredEmail;
+    if (emailIsFound) {
+      const password = userInfo.password;
+      const passwordIsCorrect = enteredPassword === password;
+      if (passwordIsCorrect) return userId;
+    }
+  }
+}
+
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie("username", username);
+  const email = req.body.email;
+  const password = req.body.password;
+  const userId = findIdWithUserInfo(email, password);
+  if (!userId) return res.status(400).send("Your login information was incorrect.");
+  res.cookie("user_id", userId);
   res.redirect("/urls/");
+});
+
+app.get("/login", (req, res) => {
+  const userId = req.cookies.user_id;
+  const userInfo = users[userId];
+  const templateVars = { userInfo };
+  res.render("urls_login", templateVars);
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {

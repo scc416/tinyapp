@@ -19,10 +19,8 @@
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
         </form>
       <% } else { %>
-      <form class="form-inline my-2 my-lg-0" action="/login" method="POST">
-        <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign in</button>
-      </form>
+        <a href="/login"><button class="btn btn-outline-success btn-sm" style="margin: 0 1em">Sign in</button></a>
+        <a href="/register"><button class="btn btn-success btn-sm">Register</button></a>
       <% } %>
     </div>
   </nav>
