@@ -14,12 +14,12 @@
         </li>
       </ul>
       <% if (userInfo) { %>
-        Hello, <%= userInfo.email %>&nbsp;
+        Logged In As: <%= userInfo.email %>!&nbsp;
         <form class="form-inline my-2 my-lg-0" action="/logout" method="POST">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
         </form>
       <% } else { %>
-        <a href="/login"><button class="btn btn-outline-success btn-sm" style="margin: 0 1em">Sign in</button></a>
+        <a href="/login"><button class="btn btn-outline-success btn-sm" style="margin: 0 1em">Login</button></a>
         <a href="/register"><button class="btn btn-success btn-sm">Register</button></a>
       <% } %>
     </div>

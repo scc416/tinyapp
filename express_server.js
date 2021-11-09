@@ -49,7 +49,7 @@ app.get("/urls", (req, res) => {
 app.get("/urls/new", (req, res) => {
   const userId = req.cookies.user_id;
   const userInfo = users[userId];
-  const templateVars = { username, userInfo };
+  const templateVars = { userInfo };
   res.render("urls_new", templateVars);
 });
 
@@ -72,10 +72,12 @@ const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const emailIsRegistered = checkIfEmailIsRegistered(email);
+  if (!emailIsRegistered) return res.status(403).send("The email address is not registered");
   const userId = findIdWithUserInfo(email, password);
-  if (!userId) return res.status(400).send("Your login information was incorrect.");
+  if (!userId) return res.status(400).send("The password doesn't match with the email address.");
   res.cookie("user_id", userId);
-  res.redirect("/urls/");
+  res.redirect("/urls");
 });
 
 app.get("/login", (req, res) => {
@@ -99,8 +101,8 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
-  res.redirect(`/urls`);
+  res.clearCookie("user_id");
+  res.redirect("/urls");
 });
 
 app.post("/register", (req, res) => {
