@@ -26,13 +26,9 @@ const generateRandomString = () => {
 const getUrlsOfAnUser = (id, urlDatabase) => {
   const urls = {};
   for (const shortURL in urlDatabase) {
-    const urlInfo = urlDatabase[shortURL];
-    const urlUserId = urlInfo.userId;
+    const { longURL, userId: urlUserId } = urlDatabase[shortURL];
     const urlBelongsToUser = urlUserId === id;
-    if (urlBelongsToUser) {
-      const longURL = urlInfo.longURL;
-      urls[shortURL] = longURL;
-    }
+    if (urlBelongsToUser) urls[shortURL] = longURL;
   }
   return urls;
 };
@@ -40,10 +36,10 @@ const getUrlsOfAnUser = (id, urlDatabase) => {
 const hashPassword = (password) => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-const getUserByEmail = function(emailToBeFound, usersDatabase) {
+const getUserByEmail = function(email, usersDatabase) {
   for (const user in usersDatabase) {
-    const { email } = usersDatabase[user];
-    const emailIsRegistered = email === emailToBeFound;
+    const { email: userEmail } = usersDatabase[user];
+    const emailIsRegistered = email === userEmail;
     if (emailIsRegistered) return user;
   }
 };
