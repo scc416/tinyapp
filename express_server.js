@@ -5,12 +5,12 @@ const PORT = 8080; // default port 8080
 
 const app = express();
 
-const { 
+const {
   generateRandomString,
   getUserByEmail,
   getUrlsOfAnUser,
   hashPassword,
-  checkPassword 
+  checkPassword
 } = require("./helpers.js");
 
 const { urlDatabase, users } = require("./database.js");
@@ -41,7 +41,7 @@ app.get("/urls", (req, res) => {
   const userId = req.session.userId;
   if (!userId) return res.status(403).send("Login to see your shorten URLs.");
   const userInfo = users[userId];
-  const urlsOfTheUser = getUrlsOfAnUser(userId);
+  const urlsOfTheUser = getUrlsOfAnUser(userId, urlDatabase);
   const templateVars = { urls: urlsOfTheUser, userInfo };
   res.render("urls_index", templateVars);
 });
@@ -71,14 +71,13 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
   const emailIsEmpty = email === "";
   if (emailIsEmpty) return res.status(400).send('Email address cannot be empty.');
   const passwordIsEmpty = password === "";
   if (passwordIsEmpty) return res.status(400).send('Password cannot be empty.');
-  const existingUserInfo = getUserByEmail(email, users);
-  if (existingUserInfo) return res.status(400).send('The email address is already registered.');
+  const existingUserId = getUserByEmail(email, users);
+  if (existingUserId) return res.status(400).send('The email address is already registered.');
   const id = generateRandomString();
   const hashedPassword = hashPassword(password);
   const userInfo = { id, email, password: hashedPassword };
@@ -95,14 +94,12 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const enteredEmail = req.body.email;
-  const enteredPassword = req.body.password;
-  const userInfo = getUserByEmail(enteredEmail, users);
-  if (!userInfo) return res.status(403).send("The email address is not registered");
-  const password = userInfo.password;
+  const { email, password: enteredPassword } = req.body;
+  const userId = getUserByEmail(email, users);
+  if (!userId) return res.status(403).send("The email address is not registered");
+  const { password } = users[userId];
   const passwordIsCorrect = checkPassword(enteredPassword, password);
   if (!passwordIsCorrect) return res.status(400).send("The password doesn't match with the email address.");
-  const userId = userInfo.id;
   req.session.userId = userId;
   res.redirect("/urls");
 });

@@ -1,0 +1,34 @@
+- login
+  - login with new email
+  - login with existing email
+  - login with blank email
+  - login with blank password
+  - login with wrong password
+  * login when already login
+- register
+  - register with new email
+  - register with existing email
+  - register with blank email
+  - register with blank password
+  * register when already login
+- view url (individually)
+  - view url that doesn't not exist
+  - when logged in
+  - when logged in to a different account
+  - when not logged in
+- edit url
+  - when logged in
+  - when logged in to a different account
+  - when not logged in
+- visit short url
+  - when logged in
+  - when logged in to a different account
+  - when not logged in
+- view exisiting urls
+  - delete url
+  - when logged in
+  - when logged in to a different account
+  - when not logged in
+- logout
+  - when logged in
+  * when not logged in

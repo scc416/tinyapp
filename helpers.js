@@ -40,12 +40,11 @@ const getUrlsOfAnUser = (id, urlDatabase) => {
 const hashPassword = (password) => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-const getUserByEmail = function(email, usersDatabase) {
+const getUserByEmail = function(emailToBeFound, usersDatabase) {
   for (const user in usersDatabase) {
-    const userInfo = usersDatabase[user];
-    const userEmail = userInfo.email;
-    const emailIsRegistered = email === userEmail;
-    if (emailIsRegistered) return userInfo;
+    const { email } = usersDatabase[user];
+    const emailIsRegistered = email === emailToBeFound;
+    if (emailIsRegistered) return user;
   }
 };
 
