@@ -18,6 +18,14 @@ const generateRandomString = () => {
   return randomString;
 };
 
+const uniqueKeyChecker = (database, newKey) => {
+  for (const key in database) {
+    const keyAreSame = key === newKey;
+    if (keyAreSame) return false;
+  }
+  return true;
+}
+
 const hashPassword = password => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
@@ -55,7 +63,12 @@ const userHelperGenerator = (userDatabase) => {
       return { data: null, err: "The email address is already registered." };
     }
   
-    const id = generateRandomString();
+    let id = generateRandomString();
+
+    while (!uniqueKeyChecker(userDatabase, id)) {
+      id = generateRandomString();
+    }
+
     const hashedPassword = hashPassword(password);
   
     const newUserInfo = { id, email, password: hashedPassword };
@@ -103,7 +116,12 @@ const urlHelperGenerator = (urlDatabase) => {
   };
 
   const generateNewShortenURL = (longURL, userId) => {
-    const shortURL = generateRandomString();
+    let shortURL = generateRandomString();
+
+    while (!uniqueKeyChecker(urlDatabase, shortURL)) {
+      shortURL = generateRandomString();
+    }
+
     const urlInfo = { longURL, userId };
     urlDatabase[shortURL] = urlInfo;
     return shortURL;
@@ -144,4 +162,4 @@ const urlHelperGenerator = (urlDatabase) => {
 
 };
 
-module.exports = { userHelperGenerator, urlHelperGenerator, hashPassword };
+module.exports = { userHelperGenerator, urlHelperGenerator, hashPassword, generateRandomString };
