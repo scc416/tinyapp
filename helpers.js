@@ -1,17 +1,12 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const generateRandomChar = () => {
-  const numOfPossibleChar = 62; // 10 (0-9 digits) + 26 (26 letters in capital) + 26 (26 letters in lower case)
+  const possibleChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numOfPossibleChar = possibleChars.length;
   const randomFloat = Math.random() * numOfPossibleChar;
   const randomInt = Math.floor(randomFloat);
-  const randomIntIsBelow10 = randomInt < 10;
-  if (randomIntIsBelow10) return randomInt;
-  const randomIntIsBelow36 = randomInt < 36;
-  let charCode = randomInt;
-  if (randomIntIsBelow36) charCode += 55; //charCode of "A" is 65, 65 - 10 = 55
-  if (!randomIntIsBelow36) charCode += 61; //charCode of "a" is 97, 97 - 36 = 61
-  const randomLetter = String.fromCharCode(charCode);
-  return randomLetter;
+  const randomChar = possibleChars[randomInt];
+  return randomChar;
 };
 
 const generateRandomString = () => {
@@ -47,17 +42,17 @@ const userHelperGenerator = (userDatabase) => {
 
     const emailIsEmpty = email === "";
     if (emailIsEmpty) {
-      return { data: null, err: 'Email address cannot be empty.' };
+      return { data: null, err: "Email address cannot be empty." };
     }
   
     const passwordIsEmpty = password === "";
     if (passwordIsEmpty) {
-      return { data: null, err: 'Password cannot be empty.' };
+      return { data: null, err: "Password cannot be empty." };
     }
   
     const existingUserId = getUserByEmail(email);
     if (existingUserId) {
-      return { data: null, err: 'The email address is already registered.' };
+      return { data: null, err: "The email address is already registered." };
     }
   
     const id = generateRandomString();
@@ -138,7 +133,14 @@ const urlHelperGenerator = (urlDatabase) => {
     return longURL;
   };
 
-  return { getURLsOfAnUser, editURL, deleteURL, generateNewShortenURL, checkIfURLBelongsToUser, getLongURLByShortURL };
+  return {
+    getURLsOfAnUser,
+    editURL,
+    deleteURL,
+    generateNewShortenURL,
+    checkIfURLBelongsToUser,
+    getLongURLByShortURL 
+  };
 
 };
 
