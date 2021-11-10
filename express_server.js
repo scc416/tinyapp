@@ -3,9 +3,19 @@ const generateRandomString = require("./generate_random_string.js");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 
-app.use(cookieParser());
+const bcrypt = require('bcryptjs');
+
+const hashPassword = (password) => bcrypt.hashSync(password, 10);
+const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
+
+//Middleware
+app.use(cookieSession({
+  name: "session",
+  keys: ["key1", "key2"]
+}));
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
@@ -25,7 +35,7 @@ const users = {
   "aJ48lW" : {
     id: "aJ48lW",
     email: "siu@protonmail.com",
-    password: "123456"
+    password: hashPassword("123456")
   }
 };
 
@@ -50,6 +60,7 @@ const checkIfEmailIsRegistered = (newEmail) => {
     const emailIsRegistered = newEmail === email;
     if (emailIsRegistered) return true;
   }
+  console.log(JSON.stringify(users));
   return false;
 };
 
@@ -66,7 +77,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.status(403).send("Login to see your shorten URLs.");
   const userInfo = users[userId];
   const urlsOfTheUser = getUrlsOfAnUser(userId);
@@ -75,7 +86,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.redirect("/login");
   const userInfo = users[userId];
   const templateVars = { userInfo };
@@ -92,7 +103,7 @@ const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
     const emailIsFound = email === enteredEmail;
     if (emailIsFound) {
       const password = userInfo.password;
-      const passwordIsCorrect = enteredPassword === password;
+      const passwordIsCorrect = checkPassword(enteredPassword, password);
       if (passwordIsCorrect) return userId;
     }
   }
@@ -105,12 +116,12 @@ app.post("/login", (req, res) => {
   if (!emailIsRegistered) return res.status(403).send("The email address is not registered");
   const userId = findIdWithUserInfo(email, password);
   if (!userId) return res.status(400).send("The password doesn't match with the email address.");
-  res.cookie("user_id", userId);
+  req.session.user_id = userId;
   res.redirect("/urls");
 });
 
 app.get("/login", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (userId) res.redirect("/urls");
   const templateVars = { userInfo: null };
   res.render("urls_login", templateVars);
@@ -118,7 +129,7 @@ app.get("/login", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.status(403).send("You have to login to delete url.");
   const urlInfo = urlDatabase[shortURL];
   const urlUserId = urlInfo.userId;
@@ -129,7 +140,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.status(403).send("You have to login to edit url.");
   const shortURL = req.params.shortURL;
   const urlInfo = urlDatabase[shortURL];
@@ -142,8 +153,8 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
-  res.redirect("/urls");
+  req.session = null;
+  res.redirect("/login");
 });
 
 app.post("/register", (req, res) => {
@@ -156,21 +167,22 @@ app.post("/register", (req, res) => {
   const emailIsRegistered = checkIfEmailIsRegistered(email);
   if (emailIsRegistered) return res.status(400).send('The email address is already registered.');
   const id = generateRandomString();
-  const userInfo = { id, email, password };
+  const hashedPassword = hashPassword(password);
+  const userInfo = { id, email, password: hashedPassword };
   users[id] = userInfo;
-  res.cookie("user_id", id);
+  req.session.user_id = id;
   res.redirect(`/urls`);
 });
 
 app.get("/register", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (userId) res.redirect("/urls");
   const templateVars = { userInfo: null };
   res.render("urls_register", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.status(403).send("You have to login to edit url.");
   const shortURL = req.params.shortURL;
   const urlInfo = urlDatabase[shortURL];
@@ -191,7 +203,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   if (!userId) return res.status(403).send('Log in to create new url.');
   const longURL = req.body.longURL;
   const shortURL = generateRandomString();
