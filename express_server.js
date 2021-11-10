@@ -40,7 +40,7 @@ app.get("/hello", (req, res) => {
 app.get("/urls", (req, res) => {
   const { userId } = req.session;
   if (!userId) return res.status(403).send("Login to see your shorten URLs.");
-  
+
   const userInfo = users[userId];
   const urlsOfTheUser = getUrlsOfAnUser(userId, urlDatabase);
   const templateVars = { urls: urlsOfTheUser, userInfo };
@@ -88,7 +88,7 @@ app.post("/register", (req, res) => {
 
   const id = generateRandomString();
   const hashedPassword = hashPassword(passwordInput);
-  const userInfo = { id, email, password: hashedPassword };
+  const userInfo = { id, email: emailInput, password: hashedPassword };
   users[id] = userInfo;
   req.session.userId = id;
   res.redirect(`/urls`);
