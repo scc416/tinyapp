@@ -11,7 +11,7 @@ const urlDatabase = {
   }
 };
 
-const users = {
+const userDatabase = {
   "aJ48lW" : {
     id: "aJ48lW",
     email: "siu@protonmail.com",
@@ -19,4 +19,4 @@ const users = {
   }
 };
 
-module.exports = { urlDatabase, users };
+module.exports = { urlDatabase, userDatabase };
