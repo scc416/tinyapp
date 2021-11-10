@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const generateRandomChar = () => {
   const numOfPossibleChar = 62; // 10 (0-9 digits) + 26 (26 letters in capital) + 26 (26 letters in lower case)
   const randomFloat = Math.random() * numOfPossibleChar;
@@ -21,14 +23,30 @@ const generateRandomString = () => {
   return randomString;
 };
 
-const getUserByEmail = function(email, database) {
-  for (const user in database) {
-    const userInfo = database[user];
+const getUrlsOfAnUser = (id, urlDatabase) => {
+  const urls = {};
+  for (const shortURL in urlDatabase) {
+    const urlInfo = urlDatabase[shortURL];
+    const urlUserId = urlInfo.userId;
+    const urlBelongsToUser = urlUserId === id;
+    if (urlBelongsToUser) {
+      const longURL = urlInfo.longURL;
+      urls[shortURL] = longURL;
+    }
+  }
+  return urls;
+};
+
+const hashPassword = (password) => bcrypt.hashSync(password, 10);
+const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
+
+const getUserByEmail = function(email, usersDatabase) {
+  for (const user in usersDatabase) {
+    const userInfo = usersDatabase[user];
     const userEmail = userInfo.email;
     const emailIsRegistered = email === userEmail;
     if (emailIsRegistered) return userInfo;
   }
 };
 
-
-module.exports = { generateRandomString, getUserByEmail };
+module.exports = { generateRandomString, getUserByEmail, getUrlsOfAnUser, hashPassword, checkPassword };
