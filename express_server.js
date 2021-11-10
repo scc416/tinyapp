@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require('bcryptjs');
 
-const { generateRandomString, getUserByEmail } = require("./helper_functions.js");
+const { generateRandomString, getUserByEmail } = require("./helpers.js");
 
 const hashPassword = (password) => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
