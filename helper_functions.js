@@ -21,4 +21,14 @@ const generateRandomString = () => {
   return randomString;
 };
 
-module.exports = generateRandomString;
+const getUserByEmail = function(email, database) {
+  for (const user in database) {
+    const userInfo = database[user];
+    const userEmail = userInfo.email;
+    const emailIsRegistered = email === userEmail;
+    if (emailIsRegistered) return userInfo;
+  }
+};
+
+
+module.exports = { generateRandomString, getUserByEmail };

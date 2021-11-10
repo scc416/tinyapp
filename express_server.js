@@ -1,11 +1,11 @@
 const express = require("express");
-const generateRandomString = require("./generate_random_string.js");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
-
 const bcrypt = require('bcryptjs');
+
+const { generateRandomString, getUserByEmail } = require("./helper_functions.js");
 
 const hashPassword = (password) => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
@@ -22,11 +22,11 @@ app.set("view engine", "ejs");
 
 const urlDatabase = {
   b6UTxQ: {
-    longURL: "https://www.tsn.ca",
+    longURL: "https://protonmail.com/",
     userId: "aJ48lW"
   },
   i3BoGr: {
-    longURL: "https://www.google.ca",
+    longURL: "https://slack.com/",
     userId: "aJ48lW"
   }
 };
@@ -51,17 +51,6 @@ const getUrlsOfAnUser = (id) => {
     }
   }
   return urls;
-};
-
-const checkIfEmailIsRegistered = (newEmail) => {
-  for (const user in users) {
-    const userInfo = users[user];
-    const email = userInfo.email;
-    const emailIsRegistered = newEmail === email;
-    if (emailIsRegistered) return true;
-  }
-  console.log(JSON.stringify(users));
-  return false;
 };
 
 app.get("/", (req, res) => {
@@ -110,12 +99,14 @@ const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
 };
 
 app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const emailIsRegistered = checkIfEmailIsRegistered(email);
-  if (!emailIsRegistered) return res.status(403).send("The email address is not registered");
-  const userId = findIdWithUserInfo(email, password);
-  if (!userId) return res.status(400).send("The password doesn't match with the email address.");
+  const enteredEmail = req.body.email;
+  const enteredPassword = req.body.password;
+  const userInfo = getUserByEmail(enteredEmail, users);
+  if (!userInfo) return res.status(403).send("The email address is not registered");
+  const password = userInfo.password;
+  const passwordIsCorrect = checkPassword(enteredPassword, password);
+  if (!passwordIsCorrect) return res.status(400).send("The password doesn't match with the email address.");
+  const userId = userInfo.id;
   req.session.user_id = userId;
   res.redirect("/urls");
 });
@@ -164,8 +155,8 @@ app.post("/register", (req, res) => {
   if (emailIsEmpty) return res.status(400).send('Email address cannot be empty.');
   const passwordIsEmpty = password === "";
   if (passwordIsEmpty) return res.status(400).send('Password cannot be empty.');
-  const emailIsRegistered = checkIfEmailIsRegistered(email);
-  if (emailIsRegistered) return res.status(400).send('The email address is already registered.');
+  const existingUserInfo = getUserByEmail(email, users);
+  if (existingUserInfo) return res.status(400).send('The email address is already registered.');
   const id = generateRandomString();
   const hashedPassword = hashPassword(password);
   const userInfo = { id, email, password: hashedPassword };
@@ -191,7 +182,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const urlBelongsToUser = userId === urlUserId;
   if (!urlBelongsToUser) return res.status(403).send("You cannot edit url of another user.");
   const userInfo = users[userId];
-  const longURL = req.body.longURL;
+  const longURL = urlDatabase[shortURL].longURL;
   const templateVars = { longURL, shortURL, userInfo };
   res.render("urls_show", templateVars);
 });
