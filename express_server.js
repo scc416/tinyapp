@@ -82,22 +82,6 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-const findIdWithUserInfo = (enteredEmail, enteredPassword) => {
-  const userIds = Object.keys(users);
-  const usersNum = userIds.length;
-  for (let i = 0; i < usersNum; i++) {
-    const userId = userIds[i];
-    const userInfo = users[userId];
-    const email = userInfo.email;
-    const emailIsFound = email === enteredEmail;
-    if (emailIsFound) {
-      const password = userInfo.password;
-      const passwordIsCorrect = checkPassword(enteredPassword, password);
-      if (passwordIsCorrect) return userId;
-    }
-  }
-};
-
 app.post("/login", (req, res) => {
   const enteredEmail = req.body.email;
   const enteredPassword = req.body.password;
