@@ -15,9 +15,10 @@ const testURLs = {
 const { getLongURLByShortURL: getLongURLByShortURLWithTestURLs } = urlHelperGenerator(testURLs);
 
 describe("#getURLsOfAnUser", function() {
-  it("should return a longURL with valid shoutURL", function() {
+  it("should return a longURL with valid shortURL", function() {
     const result = getLongURLByShortURLWithTestURLs("b6UTxQ");
     const expectedResult = "https://protonmail.com/";
     assert.strictEqual(result, expectedResult);
   });
+  
 });

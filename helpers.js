@@ -18,7 +18,7 @@ const generateRandomString = () => {
   return randomString;
 };
 
-const uniqueKeyChecker = (database, newKey) => {
+const uniqueKeyChecker = (newKey, database) => {
   for (const key in database) {
     const keyAreSame = key === newKey;
     if (keyAreSame) return false;
@@ -65,7 +65,7 @@ const userHelperGenerator = (userDatabase) => {
   
     let id = generateRandomString();
 
-    while (!uniqueKeyChecker(userDatabase, id)) {
+    while (!uniqueKeyChecker(id, userDatabase)) {
       id = generateRandomString();
     }
 
@@ -118,7 +118,7 @@ const urlHelperGenerator = (urlDatabase) => {
   const generateNewShortenURL = (longURL, userId) => {
     let shortURL = generateRandomString();
 
-    while (!uniqueKeyChecker(urlDatabase, shortURL)) {
+    while (!uniqueKeyChecker(shortURL, urlDatabase)) {
       shortURL = generateRandomString();
     }
 
@@ -162,4 +162,11 @@ const urlHelperGenerator = (urlDatabase) => {
 
 };
 
-module.exports = { userHelperGenerator, urlHelperGenerator, hashPassword, checkPassword, generateRandomString };
+module.exports = {
+  userHelperGenerator,
+  urlHelperGenerator,
+  hashPassword,
+  checkPassword,
+  generateRandomString,
+  uniqueKeyChecker
+};
