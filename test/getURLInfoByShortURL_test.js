@@ -21,11 +21,14 @@ const { getURLInfoByShortURL: getURLInfoByShortURLWithTestURLs } = urlHelperGene
 describe("#getURLInfoByShortURL", function() {
   it("should return a object of url info with valid shortURL", function() {
     const result = getURLInfoByShortURLWithTestURLs("b6UTxQ");
-    const expectedResult = {
-      longURL: "https://protonmail.com/",
-      userId: "a1234F",
-      visitorsRecord: [],
-      numOfUniqueVisitors: uniqueVisitorsCounter
+    const expectedResult = { 
+      data: {
+        longURL: "https://protonmail.com/",
+        userId: "a1234F",
+        visitorsRecord: [],
+        numOfUniqueVisitors: uniqueVisitorsCounter
+      },
+      err: null
     };
     assert.strictEqual(result, expectedResult);
   });
