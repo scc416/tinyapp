@@ -135,8 +135,9 @@ const urlHelperGenerator = (urlDatabase) => {
     delete urlDatabase[shortURL];
   };
 
-  const editURL = (userId, shortURL, longURL) => {
-    urlDatabase[shortURL] = { userId, longURL };
+  const editURL = (shortURL, longURL) => {
+    const urlInfo = urlDatabase[shortURL];
+    urlInfo.longURL = longURL;
   };
 
   const generateNewShortenURL = (longURL, userId) => {

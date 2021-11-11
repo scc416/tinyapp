@@ -154,7 +154,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
   if (error) return res.status(403).send(error);
 
   const { longURL: newLongURL } = req.body;
-  editURL(loggedInId, shortURL, newLongURL);
+  editURL(shortURL, newLongURL);
   res.redirect(`/urls/${shortURL}`);
 });
 
