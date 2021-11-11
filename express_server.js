@@ -39,17 +39,6 @@ app.get("/", (req, res) => {
   res.redirect("/login");
 });
 
-app.get("/urls.json", (req, res) => {
-  assignVisitorIdToCookie(req.session);
-
-  res.json(urlDatabase);
-});
-
-// app.get("/hello", (req, res) => {
-//   assignVisitorIdToCookie(req.session);
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-
 app.get("/urls", (req, res) => {
   assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
