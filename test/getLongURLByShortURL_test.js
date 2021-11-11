@@ -14,7 +14,7 @@ const testURLs = {
 
 const { getLongURLByShortURL: getLongURLByShortURLWithTestURLs } = urlHelperGenerator(testURLs);
 
-describe("#getURLsOfAnUser", function() {
+describe("#getLongURLByShortURL", function() {
   it("should return a longURL with valid shortURL", function() {
     const result = getLongURLByShortURLWithTestURLs("b6UTxQ");
     const expectedResult = "https://protonmail.com/";
