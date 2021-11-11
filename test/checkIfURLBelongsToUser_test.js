@@ -25,12 +25,6 @@ const testURLs = {
   }
 };
 
-const info = {
-  userId: undefined,
-  shortURL: "",
-  errMsgForNotLoggedIn: "NOT LOGGED IN",
-  errMsgForURLNotBelongToUser: "URL DOES NOT BELONG TO USER"};
-
 const { checkIfURLBelongsToUser: checkIfURLBelongsToUserWithTestURLs } = urlHelperGenerator(testURLs);
 const { checkIfURLBelongsToUser: checkIfURLBelongsToUserWithNoURLs } = urlHelperGenerator({});
 const { getUserInfoById: getUserInfoByIdWithTestUsers } = userHelperGenerator(testUsers);
@@ -78,11 +72,7 @@ describe("#checkIfURLBelongsToUser", function() {
     const info = { userId: "userRandomID", shortURL: "b6UTxQ"};
     const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
     const expectedResult = {
-      data: {
-        id: "userRandomID",
-        email: "user@example.com",
-        password: "purple-monkey-dinosaur"
-      }, 
+      data: { id: "userRandomID", email: "user@example.com", password: "purple-monkey-dinosaur" },
       err: null
     };
     assert.deepStrictEqual(result, expectedResult);

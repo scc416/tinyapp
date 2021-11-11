@@ -50,8 +50,7 @@ describe("#authenticateUser", function() {
 
   it("should return user id with correct email and password", function() {
     const result = authenticateUserWithTestUsers("user@example.com", "purple-monkey-dinosaur");
-    const expectedResult = { data: "userRandomID", err: null }
+    const expectedResult = { data: "userRandomID", err: null };
     assert.deepStrictEqual(result, expectedResult);
   });
-
 });
