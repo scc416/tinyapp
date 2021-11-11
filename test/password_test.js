@@ -2,7 +2,6 @@ const { expect } = require("chai");
 const { hashPassword, checkPassword } = require("../helpers.js");
 
 describe("#hashPassword and #checkPassword", function() {
-  this.timeout(100000);
 
   it("should return true for the same string", function() {
     const password = "this is a password";

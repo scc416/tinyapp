@@ -15,7 +15,7 @@ const testURLs = {
 const { editURL: editURLWithTestURLs } = urlHelperGenerator(testURLs);
 
 describe("#editURL", function() {
-  it("should return a longURL with valid shortURL", function() {
+  it("should updated the longURL", function() {
     editURLWithTestURLs("a1234F", "i3BoGr", "https://telegram.org/");
     const expectedResult = {
       b6UTxQ: {
