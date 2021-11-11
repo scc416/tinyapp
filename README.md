@@ -74,4 +74,35 @@ TinyApp is a full stack web application built with Node and Express that allows 
  ┗ 📜package.json
  </pre>
 
+### 📂 docs
+Store images that are displayed in this README document.
+
+### 📂 test
+Store unit test for the helper functions (in helper.js).
+These test are written with [mocha](https://mochajs.org/) and [chai](https://www.chaijs.com/).
+
+### 📂 views
+Store all the [EJS](https://ejs.co/) files. Folder `partials` has only one file, `_header.ejs`. It displays the header for all other [EJS](https://ejs.co/) files
+
+### 📜 .gitignore
+This file is to ignore the node_modules folder
+
+### 📜 README.md
+This document 
+
+### 📜 constants.js
+Store all the constants, such as `PORT` for the server and `KEYS` for [cookie-session](https://github.com/expressjs/cookie-session)
+
+### 📜 database.js
+Store the database of urls and users
+
+### 📜 express_server.js
+The javascript file where the server is defined.
+
+### 📜 helpers.js
+Store all the helpers function. The functions which change the database (urls/users) are put in `userHelperGenerator` or `urlHelperGenerator` respectively. Functions that are used by other files are exported.
+
+### 📜 package-lock.json
+### 📜 package.json
+
 ## Features
