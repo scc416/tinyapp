@@ -4,12 +4,14 @@ const urlDatabase = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "aJ48lW",
+    dateCreated: new Date(),
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "aJ48lW",
+    dateCreated: new Date(),
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }

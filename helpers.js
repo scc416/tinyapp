@@ -152,6 +152,7 @@ const urlHelperGenerator = (urlDatabase) => {
       longURL,
       userId,
       visitorsRecord: [],
+      dateCreated: new Date(),
       numOfUniqueVisitors: uniqueVisitorsCounter
     };
     urlDatabase[shortURL] = urlInfo;

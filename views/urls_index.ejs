@@ -17,15 +17,22 @@
         <tr>
           <th scope="col">Short URL</th>
           <th scope="col">Long URL</th>
+          <th scope="col">Date Created</th>
+          <th scope="col">Number of visits</th>
+          <th scope="col">Number of unique visits</th>
           <th scope="col">Edit</th>
           <th scope="col">Delete</th>
         </tr>
       </thead>
       <tbody>
-        <% for (const shortURL in urls) { %>
+        <% for (const shortURL in urls) { 
+          const urlInfo = urls[shortURL]; %>
           <tr>
             <td><%= shortURL %></td>
-            <td><%= urls[shortURL] %></td>
+            <td><%= urlInfo.longURL %></td>
+            <td><%= urlInfo.dateCreated %></td>
+            <td><%= urlInfo.visitorsRecord.length %></td>
+            <td><%= urlInfo.numOfUniqueVisitors() %></td>
             <td>
               <a href="/urls/<%= shortURL %>">
                 <button class="btn btn-outline-primary" type="submit">
