@@ -124,9 +124,10 @@ const urlHelperGenerator = (urlDatabase) => {
   const getURLsOfAnUser = (id) => {
     const urls = {};
     for (const shortURL in urlDatabase) {
-      const { longURL, userId: urlUserId } = urlDatabase[shortURL];
+      const urlInfo = urlDatabase[shortURL];
+      const { userId: urlUserId } = urlInfo;
       const urlBelongsToUser = urlUserId === id;
-      if (urlBelongsToUser) urls[shortURL] = longURL;
+      if (urlBelongsToUser) urls[shortURL] = urlInfo;
     }
     return urls;
   };
