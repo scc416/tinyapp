@@ -18,6 +18,11 @@ const generateRandomString = () => {
   return randomString;
 };
 
+const assignVisitorIdToCookie = (cookie) => {
+  const { visitorId } = cookie;
+  if (!visitorId) cookie.visitorId = generateRandomString();
+};
+
 const uniqueKeyChecker = (newKey, database) => {
   for (const key in database) {
     const keyAreSame = key === newKey;
@@ -28,7 +33,7 @@ const uniqueKeyChecker = (newKey, database) => {
 
 const uniqueVisitorsCounter = function() {
   const visitors = [];
-  const visitorsRecord = this.visitorsRecords;
+  const visitorsRecord = this.visitorsRecord;
   console.log(JSON.stringify(visitorsRecord));
   for (const record of visitorsRecord) {
     const visitorId = record.visitorId;
@@ -110,6 +115,14 @@ const userHelperGenerator = (userDatabase) => {
 };
 
 const urlHelperGenerator = (urlDatabase) => {
+
+  const makeVisitorRecords = (shortURL, visitorId) => {
+    const record = { visitorId, timestamp: new Date() };
+    console.log(JSON.stringify(record));
+    const visitorRecord = urlDatabase[shortURL].visitorsRecord;
+    visitorRecord.push(record);
+  }
+
   const getURLsOfAnUser = (id) => {
     const urls = {};
     for (const shortURL in urlDatabase) {
@@ -159,18 +172,19 @@ const urlHelperGenerator = (urlDatabase) => {
     return { data: userInfo, err: null };
   };
   
-  const getLongURLByShortURL = (shortURL) => {
-    const { longURL } = urlDatabase[shortURL];
-    return longURL;
+  const getURLInfoByShortURL = (shortURL) => {
+    const urlInfo = urlDatabase[shortURL];
+    return urlInfo;
   };
 
   return {
+    makeVisitorRecords,
     getURLsOfAnUser,
     editURL,
     deleteURL,
     generateNewShortenURL,
     checkIfURLBelongsToUser,
-    getLongURLByShortURL
+    getURLInfoByShortURL
   };
 
 };
@@ -182,5 +196,6 @@ module.exports = {
   checkPassword,
   generateRandomString,
   uniqueKeyChecker,
-  uniqueVisitorsCounter
+  uniqueVisitorsCounter,
+  assignVisitorIdToCookie
 };

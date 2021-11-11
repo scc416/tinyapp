@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const { PORT, KEYS } = require("./constants.js");
-const { userHelperGenerator, urlHelperGenerator } = require("./helpers.js");
+const { userHelperGenerator, urlHelperGenerator, assignVisitorIdToCookie } = require("./helpers.js");
 const { userDatabase, urlDatabase } = require("./database.js");
 
 const { getUserInfoById, getIdForNewUser, authenticateUser } =
@@ -14,7 +14,9 @@ const {
   editURL,
   generateNewShortenURL,
   checkIfURLBelongsToUser,
-  getLongURLByShortURL } =
+  getURLInfoByShortURL,
+  makeVisitorRecords,
+} =
   urlHelperGenerator(urlDatabase);
 
 const app = express();
@@ -28,18 +30,22 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   res.send("Hello!");
 });
 
 app.get("/urls.json", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   res.json(urlDatabase);
 });
 
 app.get("/hello", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 app.get("/urls", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   
@@ -65,6 +71,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   if (!userInfo) return res.redirect("/login");
@@ -74,6 +81,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
@@ -97,6 +105,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
@@ -155,6 +164,7 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const errMsgForNotLoggedIn = "You have to login to edit url.";
   const errMsgForURLNotBelongToUser = "You cannot edit url of another user.";
@@ -167,14 +177,17 @@ app.get("/urls/:shortURL", (req, res) => {
   if (error) return res.status(403).send(error);
 
   const { data: userInfo } = result;
-  const longURL = getLongURLByShortURL(shortURL);
-  const templateVars = { longURL, shortURL, userInfo };
+  const urlInfo = getURLInfoByShortURL(shortURL);
+  const templateVars = { shortURL, urlInfo, userInfo };
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
+  assignVisitorIdToCookie(req.session);
   const { shortURL } = req.params;
-  const longURL = getLongURLByShortURL(shortURL);
+  const { visitorId } = req.session;
+  const { longURL } = getURLInfoByShortURL(shortURL);
+  makeVisitorRecords(shortURL, visitorId);
   res.redirect(longURL);
 });
 
