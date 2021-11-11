@@ -19,13 +19,13 @@ const { getUserInfoById: getUserInfoByIdWithNoUsers } = userHelperGenerator({});
 
 describe("#getUserInfoById", function() {
   it("should return a user with valid user id", function() {
-    const user = getUserInfoByIdWithTestUsers("userRandomID");
-    const expectedUserInfo = {
+    const result = getUserInfoByIdWithTestUsers("userRandomID");
+    const expectedResult = {
       id: "userRandomID",
       email: "user@example.com",
       password: "purple-monkey-dinosaur"
     };
-    assert.deepStrictEqual(user, expectedUserInfo);
+    assert.deepStrictEqual(result, expectedResult);
   });
 
   it("should return undefined with invalid user id", function() {

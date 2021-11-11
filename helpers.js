@@ -162,4 +162,4 @@ const urlHelperGenerator = (urlDatabase) => {
 
 };
 
-module.exports = { userHelperGenerator, urlHelperGenerator, hashPassword, generateRandomString };
+module.exports = { userHelperGenerator, urlHelperGenerator, hashPassword, checkPassword, generateRandomString };
