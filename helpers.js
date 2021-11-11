@@ -26,6 +26,19 @@ const uniqueKeyChecker = (newKey, database) => {
   return true;
 };
 
+const uniqueVisitorsCounter = function() {
+  const visitors = [];
+  const visitorsRecord = this.visitorsRecords;
+  console.log(JSON.stringify(visitorsRecord));
+  for (const record of visitorsRecord) {
+    const visitorId = record.visitorId;
+    const counted = visitors.includes(visitorId);
+    if (!counted) visitors.push(visitorId);
+  }
+  const count = visitors.length;
+  return count;
+};
+
 const hashPassword = password => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
@@ -168,5 +181,6 @@ module.exports = {
   hashPassword,
   checkPassword,
   generateRandomString,
-  uniqueKeyChecker
+  uniqueKeyChecker,
+  uniqueVisitorsCounter
 };

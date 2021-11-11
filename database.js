@@ -1,15 +1,17 @@
-const { hashPassword } = require("./helpers.js");
+const { hashPassword, uniqueVisitorsCounter } = require("./helpers.js");
 
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "aJ48lW",
-    visitRecords: []
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "aJ48lW",
-    visitRecords: []
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
 
