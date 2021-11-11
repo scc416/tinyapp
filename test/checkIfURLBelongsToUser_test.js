@@ -17,13 +17,13 @@ const testUsers = {
 const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
-    userId: "a1234F",
+    userId: "userRandomID",
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
-    userId: "a1234F",
+    userId: "userRandomID",
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
@@ -79,9 +79,7 @@ describe("#checkIfURLBelongsToUser", function() {
       data: {
         id: "userRandomID",
         email: "user@example.com",
-        password: "purple-monkey-dinosaur",
-        visitorsRecord: [],
-        numOfUniqueVisitors: uniqueVisitorsCounter
+        password: "purple-monkey-dinosaur"
       },
       err: null
     };
