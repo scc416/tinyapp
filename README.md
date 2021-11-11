@@ -5,22 +5,22 @@ TinyApp is a full stack web application built with Node and Express that allows 
 ## Final Product
 
 ![urls-page.png](./docs/urls-page.png)
-*Keep track of your short URL*
+*View all of your short URLs*
 
 ![show-page.png](./docs/show-page.png)
-*You can edit the long URL of your short URL*
+*You can view the statistics (date created, number of visits, number of unique visitors) and edit the long URL of your short URL*
 
 ![show-page-track-visitors.png](./docs/show-page-track-visitors.png)
 *Keep track of the visitors that visited your short URL (in desending order of time)*
 
 ## Dependencies
 
-### Node.js
-### Express
-### EJS
-### bcrypt
-### body-parser
-### cookie-session
+- [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+- [EJS](https://ejs.co/)
+- [bcrypt](https://github.com/dcodeIO/bcrypt.js)
+- [body-parser](https://github.com/expressjs/body-parser)
+- [cookie-session](https://github.com/expressjs/cookie-session)
 
 ## Getting Started
 - Clone this project to your computer
