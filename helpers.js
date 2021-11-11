@@ -34,7 +34,6 @@ const uniqueKeyChecker = (newKey, database) => {
 const uniqueVisitorsCounter = function() {
   const visitors = [];
   const visitorsRecord = this.visitorsRecord;
-  console.log(JSON.stringify(visitorsRecord));
   for (const record of visitorsRecord) {
     const visitorId = record.visitorId;
     const counted = visitors.includes(visitorId);
@@ -118,10 +117,9 @@ const urlHelperGenerator = (urlDatabase) => {
 
   const makeVisitorRecords = (shortURL, visitorId) => {
     const record = { visitorId, timestamp: new Date() };
-    console.log(JSON.stringify(record));
     const visitorRecord = urlDatabase[shortURL].visitorsRecord;
     visitorRecord.push(record);
-  }
+  };
 
   const getURLsOfAnUser = (id) => {
     const urls = {};
@@ -148,8 +146,14 @@ const urlHelperGenerator = (urlDatabase) => {
       shortURL = generateRandomString();
     }
 
-    const urlInfo = { longURL, userId };
+    const urlInfo = {
+      longURL,
+      userId,
+      visitorsRecord: [],
+      numOfUniqueVisitors: uniqueVisitorsCounter
+    };
     urlDatabase[shortURL] = urlInfo;
+    
     return shortURL;
   };
 
