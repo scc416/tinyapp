@@ -32,11 +32,16 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   assignVisitorIdToCookie(req.session);
-  res.redirect("/urls");
+  const { userId: loggedInId } = req.session;
+  const userInfo = getUserInfoById(loggedInId);
+
+  if (userInfo) return res.redirect("/urls");
+  res.redirect("/login");
 });
 
 app.get("/urls.json", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   res.json(urlDatabase);
 });
 
@@ -45,7 +50,7 @@ app.get("/urls.json", (req, res) => {
 //   res.send("<html><body>Hello <b>World</b></body></html>\n");
 // });
 
-app.get("/urls", (req, res, next) => {
+app.get("/urls", (req, res) => {
   assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
@@ -96,7 +101,7 @@ app.get("/register", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
-  if (userInfo) res.redirect("/urls");
+  if (userInfo) return res.redirect("/urls");
 
   const templateVars = { userInfo: null };
   res.render("urls_register", templateVars);
@@ -112,7 +117,7 @@ app.post("/register", (req, res) => {
     return (
       res
         .status(400)
-        .render('urls_error', { userInfo, error }));
+        .render('urls_error', { userInfo: null, error }));
   }
   
   const { data: userId } = result;
@@ -125,7 +130,7 @@ app.get("/login", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
-  if (userInfo) res.redirect("/urls");
+  if (userInfo) return res.redirect("/urls");
 
   const templateVars = { userInfo: null };
   res.render("urls_login", templateVars);
@@ -140,7 +145,7 @@ app.post("/login", (req, res) => {
     return (
       res
         .status(400)
-        .render('urls_error', { userInfo, error }));
+        .render('urls_error', { userInfo: null, error }));
   }
 
   const { data: userId } = result;
@@ -158,6 +163,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   
   const error = result.err;
   if (error) {
+    const userInfo = getUserInfoById(loggedInId);
     return (
       res
         .status(400)
@@ -178,6 +184,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
   
   const error = result.err;
   if (error) {
+    const userInfo = getUserInfoById(loggedInId);
     return (
       res
         .status(400)
@@ -206,6 +213,7 @@ app.get("/urls/:shortURL", (req, res) => {
   
   const error = result.err;
   if (error) {
+    const userInfo = getUserInfoById(loggedInId);
     return (
       res
         .status(400)
@@ -226,13 +234,17 @@ app.get("/u/:shortURL", (req, res) => {
   const result = getURLInfoByShortURL(shortURL);
 
   const errMsg = result.err;
+
   if (errMsg) {
+    const { userId: loggedInId } = req.session;
+    const userInfo = getUserInfoById(loggedInId);
     return (
       res
         .status(400)
         .render('urls_error', { userInfo, error: errMsg }));
   }
 
+  const { longURL } = result.data;
   makeVisitorRecords(shortURL, visitorId);
   res.redirect(longURL);
 });
