@@ -32,7 +32,7 @@
     <div class="card text-center text-white bg-dark mb-3">
       <div class="card-body">
         <h5 class="card-title">Edit the Long URL</h5>
-        <form class="form-inline justify-content-center" action="/urls/<%= shortURL %>/edit" method="POST">
+        <form class="form-inline justify-content-center" action="/urls/<%= shortURL %>/?_method=PUT" method="POST">
           <div class="form-group mb-2">
             <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
             <button type="submit" class="btn btn-light">Submit</button>

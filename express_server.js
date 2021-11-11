@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session");
 const { PORT, KEYS } = require("./constants.js");
 const { userHelperGenerator, urlHelperGenerator, assignVisitorIdToCookie } = require("./helpers.js");
 const { userDatabase, urlDatabase } = require("./database.js");
+const methodOverride = require('method-override');
 
 const { getUserInfoById, getIdForNewUser, authenticateUser } =
   userHelperGenerator(userDatabase);
@@ -25,6 +26,8 @@ const app = express();
 app.use(cookieSession({
   keys: KEYS
 }));
+
+app.use(methodOverride('_method'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -142,7 +145,7 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
-app.post("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL/", (req, res) => {
   const { userId: loggedInId } = req.session;
   const { shortURL } = req.params;
   const errMsgForNotLoggedIn = "You have to login to delete url.";
@@ -163,7 +166,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   res.redirect("/urls");
 });
 
-app.post("/urls/:shortURL/edit", (req, res) => {
+app.put("/urls/:shortURL", (req, res) => {
   const { userId: loggedInId } = req.session;
   const errMsgForNotLoggedIn = "You have to login to edit url.";
   const errMsgForURLNotBelongToUser = "You cannot edit url of another user.";
