@@ -17,34 +17,34 @@ const testUsers = {
 const { getUserByEmail: getUserByEmailWithTestUsers } = userHelperGenerator(testUsers);
 const { getUserByEmail: getUserByEmailWithNoUsers } = userHelperGenerator({});
 
-describe("getUserByEmail", function() {
+describe("#getUserByEmail", function() {
   it("should return a user with valid email", function() {
-    const user = getUserByEmailWithTestUsers("user@example.com");
-    const expectedUserID = "userRandomID";
-    assert.strictEqual(user, expectedUserID);
+    const result = getUserByEmailWithTestUsers("user@example.com");
+    const expectedResult = "userRandomID";
+    assert.strictEqual(result, expectedResult);
   });
 
   it("should return undefined with non-existent email", function() {
-    const user = getUserByEmailWithTestUsers("donotexist@example.com");
-    const expectedUserID = undefined;
-    assert.strictEqual(user, expectedUserID);
+    const result = getUserByEmailWithTestUsers("donotexist@example.com");
+    const expectedResult = undefined;
+    assert.strictEqual(result, expectedResult);
   });
 
   it("should return undefined with no user in the database", function() {
-    const user = getUserByEmailWithNoUsers("user@example.com");
-    const expectedUserID = undefined;
-    assert.strictEqual(user, expectedUserID);
+    const result = getUserByEmailWithNoUsers("user@example.com");
+    const expectedResult = undefined;
+    assert.strictEqual(result, expectedResult);
   });
 
   it("should return undefined with an empty string email", function() {
-    const user = getUserByEmailWithTestUsers("");
-    const expectedUserID = undefined;
-    assert.strictEqual(user, expectedUserID);
+    const result = getUserByEmailWithTestUsers("");
+    const expectedResult = undefined;
+    assert.strictEqual(result, expectedResult);
   });
 
   it("should return undefined with an undefined email", function() {
-    const user = getUserByEmailWithTestUsers(undefined);
-    const expectedUserID = undefined;
-    assert.strictEqual(user, expectedUserID);
+    const result = getUserByEmailWithTestUsers(undefined);
+    const expectedResult = undefined;
+    assert.strictEqual(result, expectedResult);
   });
 });
