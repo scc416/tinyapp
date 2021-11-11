@@ -24,7 +24,7 @@ const uniqueKeyChecker = (database, newKey) => {
     if (keyAreSame) return false;
   }
   return true;
-}
+};
 
 const hashPassword = password => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
@@ -157,7 +157,7 @@ const urlHelperGenerator = (urlDatabase) => {
     deleteURL,
     generateNewShortenURL,
     checkIfURLBelongsToUser,
-    getLongURLByShortURL 
+    getLongURLByShortURL
   };
 
 };

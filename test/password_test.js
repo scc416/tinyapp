@@ -12,7 +12,7 @@ describe("#hashPassword and #checkPassword", function() {
   });
 
   it("should return false for different string", function() {
-    const password = "SomePassword"
+    const password = "SomePassword";
     const hashedPassword = hashPassword("DiffetentPassword");
     const result = checkPassword(password, hashedPassword);
     expect(result).to.be.false;
