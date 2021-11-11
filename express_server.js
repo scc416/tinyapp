@@ -193,7 +193,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 
   const { longURL: newLongURL } = req.body;
   editURL(shortURL, newLongURL);
-  res.redirect(`/urls/${shortURL}`);
+  res.redirect(`/urls`);
 });
 
 app.post("/logout", (req, res) => {

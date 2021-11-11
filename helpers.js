@@ -181,7 +181,7 @@ const urlHelperGenerator = (urlDatabase) => {
   
   const getURLInfoByShortURL = (shortURL) => {
     const urlInfo = urlDatabase[shortURL];
-    if (!urlInfo) return { data: null, err: "Short URL does not exist" };
+    if (!urlInfo) return { data: null, err: "This short URL does not exist." };
     return { data: urlInfo, err: null };
   };
 
