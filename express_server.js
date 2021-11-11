@@ -27,6 +27,7 @@ app.use(cookieSession({
 }));
 
 app.use(bodyParser.urlencoded({extended: true}));
+
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
@@ -44,12 +45,17 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-app.get("/urls", (req, res) => {
+app.get("/urls", (req, res, next) => {
   assignVisitorIdToCookie(req.session);
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   
-  if (!userInfo) return res.status(403).send("Login to see your shorten URLs.");
+  if (!userInfo) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error: "Login to see your shorten URLs." }));
+  }
 
   const urlsOfTheUser = getURLsOfAnUser(loggedInId);
 
@@ -62,7 +68,12 @@ app.post("/urls", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
-  if (!userInfo) return res.status(403).send("Login to create new url.");
+  if (!userInfo) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error: "Login to create new url." }));
+  }
 
   const { longURL } = req.body;
   const shortURL = generateNewShortenURL(longURL, loggedInId);
@@ -97,7 +108,12 @@ app.post("/register", (req, res) => {
   const result = getIdForNewUser(emailInput, passwordInput);
 
   const error = result.err;
-  if (error) return res.status(403).send(error);
+  if (error) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error }));
+  }
   
   const { data: userId } = result;
   req.session.userId = userId;
@@ -120,7 +136,12 @@ app.post("/login", (req, res) => {
   const result = authenticateUser(emailInput, passwordInput);
 
   const error = result.err;
-  if (error) return res.status(403).send(error);
+  if (error) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error }));
+  }
 
   const { data: userId } = result;
   req.session.userId = userId;
@@ -136,7 +157,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const result = checkIfURLBelongsToUser(infoToDeleteURL, getUserInfoById);
   
   const error = result.err;
-  if (error) return res.status(403).send(error);
+  if (error) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error }));
+  }
 
   deleteURL(shortURL);
   res.redirect("/urls/");
@@ -151,7 +177,12 @@ app.post("/urls/:shortURL/edit", (req, res) => {
   const result = checkIfURLBelongsToUser(infoToEditURL, getUserInfoById);
   
   const error = result.err;
-  if (error) return res.status(403).send(error);
+  if (error) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error }));
+  }
 
   const { longURL: newLongURL } = req.body;
   editURL(shortURL, newLongURL);
@@ -174,10 +205,16 @@ app.get("/urls/:shortURL", (req, res) => {
   const result = checkIfURLBelongsToUser(infoToViewURLDetails, getUserInfoById);
   
   const error = result.err;
-  if (error) return res.status(403).send(error);
+  if (error) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error }));
+  }
 
   const { data: userInfo } = result;
-  const urlInfo = getURLInfoByShortURL(shortURL);
+  const result2 = getURLInfoByShortURL(shortURL);
+  const { data: urlInfo } = result2;
   const templateVars = { shortURL, urlInfo, userInfo };
   res.render("urls_show", templateVars);
 });
@@ -186,7 +223,16 @@ app.get("/u/:shortURL", (req, res) => {
   assignVisitorIdToCookie(req.session);
   const { shortURL } = req.params;
   const { visitorId } = req.session;
-  const { longURL } = getURLInfoByShortURL(shortURL);
+  const result = getURLInfoByShortURL(shortURL);
+
+  const errMsg = result.err;
+  if (errMsg) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error: errMsg }));
+  }
+
   makeVisitorRecords(shortURL, visitorId);
   res.redirect(longURL);
 });
