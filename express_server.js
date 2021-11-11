@@ -171,7 +171,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   }
 
   deleteURL(shortURL);
-  res.redirect("/urls/");
+  res.redirect("/urls");
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
@@ -198,7 +198,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/login");
+  res.redirect("/urls");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
