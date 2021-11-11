@@ -11,7 +11,9 @@
 <body>
   <%- include("partials/_header", { userInfo }); %>
   <main style="margin: 1em;">
-    <h3>My URLs</h3>
+    <div style = "display: flex; justify-content: space-between;"><h3>My URLs</h3>
+    <a href="/urls/new"><button class="btn btn-info btn-sm" style="text-align: right">Create a New Short Link</button></a>
+    </div>
     <table class="table">
       <thead>
         <tr>
