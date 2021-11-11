@@ -32,7 +32,7 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   assignVisitorIdToCookie(req.session);
-  res.send("Hello!");
+  res.redirect("/urls");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -40,10 +40,10 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  assignVisitorIdToCookie(req.session);
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+// app.get("/hello", (req, res) => {
+//   assignVisitorIdToCookie(req.session);
+//   res.send("<html><body>Hello <b>World</b></body></html>\n");
+// });
 
 app.get("/urls", (req, res, next) => {
   assignVisitorIdToCookie(req.session);
