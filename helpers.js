@@ -18,6 +18,16 @@ const generateRandomString = () => {
   return randomString;
 };
 
+const createDateString = () => {
+  const date = new Date();
+  const options = {
+    timeZone: 'America/Toronto',
+    timeZoneName: 'short'
+  };
+  const dateString = date.toLocaleString('en-US', options);
+  return dateString;
+}
+
 const assignVisitorIdToCookie = (cookie) => {
   const { visitorId } = cookie;
   if (!visitorId) cookie.visitorId = generateRandomString();
@@ -116,7 +126,7 @@ const userHelperGenerator = (userDatabase) => {
 const urlHelperGenerator = (urlDatabase) => {
 
   const makeVisitorRecords = (shortURL, visitorId) => {
-    const record = { visitorId, timestamp: new Date() };
+    const record = { visitorId, timestamp: createDateString() };
     const visitorRecord = urlDatabase[shortURL].visitorsRecord;
     visitorRecord.push(record);
   };
@@ -152,7 +162,7 @@ const urlHelperGenerator = (urlDatabase) => {
       longURL,
       userId,
       visitorsRecord: [],
-      dateCreated: new Date(),
+      dateCreated: createDateString(),
       numOfUniqueVisitors: uniqueVisitorsCounter
     };
     urlDatabase[shortURL] = urlInfo;
@@ -205,5 +215,6 @@ module.exports = {
   generateRandomString,
   uniqueKeyChecker,
   uniqueVisitorsCounter,
-  assignVisitorIdToCookie
+  assignVisitorIdToCookie,
+  createDateString
 };

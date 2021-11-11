@@ -1,17 +1,17 @@
-const { hashPassword, uniqueVisitorsCounter } = require("./helpers.js");
+const { hashPassword, uniqueVisitorsCounter, createDateString } = require("./helpers.js");
 
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "aJ48lW",
-    dateCreated: new Date(),
+    dateCreated: createDateString(),
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "aJ48lW",
-    dateCreated: new Date(),
+    dateCreated: createDateString(),
     visitorsRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
