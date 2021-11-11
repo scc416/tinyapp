@@ -16,19 +16,18 @@ const testURLs = {
   }
 };
 
-const { deleteURL: deleteURLWithTestURLs } = urlHelperGenerator(testURLs);
+const { getURLInfoByShortURL: getURLInfoByShortURLWithTestURLs } = urlHelperGenerator(testURLs);
 
-describe("#deleteURL", function() {
-  it("should delete the key and value of the respective shortURL", function() {
-    deleteURLWithTestURLs("i3BoGr");
+describe("#getURLInfoByShortURL", function() {
+  it("should return a object of url info with valid shortURL", function() {
+    const result = getURLInfoByShortURLWithTestURLs("b6UTxQ");
     const expectedResult = {
-      b6UTxQ: {
-        longURL: "https://protonmail.com/",
-        userId: "a1234F",
-        visitorsRecord: [],
-        numOfUniqueVisitors: uniqueVisitorsCounter
-      }
+      longURL: "https://protonmail.com/",
+      userId: "a1234F",
+      visitorsRecord: [],
+      numOfUniqueVisitors: uniqueVisitorsCounter
     };
-    assert.deepStrictEqual(testURLs, expectedResult);
+    assert.strictEqual(result, expectedResult);
   });
+  
 });

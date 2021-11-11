@@ -1,14 +1,18 @@
 const { expect } = require("chai");
-const { urlHelperGenerator } = require("../helpers.js");
+const { urlHelperGenerator, uniqueVisitorsCounter } = require("../helpers.js");
 
 const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
-    userId: "a1234F"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
-    userId: "a1234F"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
 
@@ -19,8 +23,18 @@ describe("#getURLsOfAnUser", function() {
   it("should return an object of urls for user", function() {
     const result = getURLsOfAnUserWithTestURLs("a1234F");
     const expectedResult = {
-      b6UTxQ: "https://protonmail.com/",
-      i3BoGr: "https://slack.com/"
+      b6UTxQ: {
+        longURL: "https://protonmail.com/",
+        userId: "a1234F",
+        visitorsRecord: [],
+        numOfUniqueVisitors: uniqueVisitorsCounter
+      },
+      i3BoGr: {
+        longURL: "https://slack.com/",
+        userId: "a1234F",
+        visitorsRecord: [],
+        numOfUniqueVisitors: uniqueVisitorsCounter
+      }
     };
     expect(result).to.deep.equal(expectedResult);
   });

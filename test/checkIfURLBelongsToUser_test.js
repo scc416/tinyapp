@@ -1,5 +1,5 @@
 const { assert } = require("chai");
-const { userHelperGenerator, urlHelperGenerator } = require("../helpers.js");
+const { userHelperGenerator, urlHelperGenerator, uniqueVisitorsCounter } = require("../helpers.js");
 
 const testUsers = {
   "userRandomID": {
@@ -17,11 +17,15 @@ const testUsers = {
 const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
-    userId: "userRandomID"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
-    userId: "userRandomID"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
 
@@ -72,7 +76,13 @@ describe("#checkIfURLBelongsToUser", function() {
     const info = { userId: "userRandomID", shortURL: "b6UTxQ"};
     const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
     const expectedResult = {
-      data: { id: "userRandomID", email: "user@example.com", password: "purple-monkey-dinosaur" },
+      data: {
+        id: "userRandomID",
+        email: "user@example.com",
+        password: "purple-monkey-dinosaur",
+        visitorsRecord: [],
+        numOfUniqueVisitors: uniqueVisitorsCounter
+      },
       err: null
     };
     assert.deepStrictEqual(result, expectedResult);

@@ -4,11 +4,15 @@ const { urlHelperGenerator, uniqueVisitorsCounter } = require("../helpers.js");
 const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
-    userId: "a1234F"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
-    userId: "a1234F"
+    userId: "a1234F",
+    visitorsRecord: [],
+    numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
 
