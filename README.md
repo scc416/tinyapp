@@ -33,12 +33,6 @@ TinyApp is a full stack web application built with Node and Express that allows 
 <pre>
 📦tinyapp
  ┣ 📂docs
- ┃ ┣ 📜new-restricted.png
- ┃ ┣ 📜show-page.png
- ┃ ┣ 📜show-page-track-visitors.png
- ┃ ┣ 📜urls-page.png
- ┃ ┣ 📜urls-page-restricted.png
- ┃ ┗ 📜urls-page-restricted-login.png
  ┣ 📂test
  ┃ ┣ 📜authenticateUser_test.js
  ┃ ┣ 📜checkIfURLBelongsToUser_test.js
@@ -75,34 +69,48 @@ TinyApp is a full stack web application built with Node and Express that allows 
  </pre>
 
 ### 📂 docs
-Store images that are displayed in this README document.
+Store images that are displayed in this README document. These images are not included on the diagram above.
 
 ### 📂 test
-Store unit test for the helper functions (in helper.js).
+Store unit test for the helper functions (in helper.js).\
 These test are written with [mocha](https://mochajs.org/) and [chai](https://www.chaijs.com/).
 
 ### 📂 views
-Store all the [EJS](https://ejs.co/) files. Folder `partials` has only one file, `_header.ejs`. It displays the header for all other [EJS](https://ejs.co/) files
+Store all the [EJS](https://ejs.co/) files. Folder `partials` has only one file, `_header.ejs`. It displays the header for all other [EJS](https://ejs.co/) files.
 
 ### 📜 .gitignore
-This file is to ignore the node_modules folder
+This file is to ignore the node_modules folder.
 
 ### 📜 README.md
-This document 
+This document that you are reading.
 
 ### 📜 constants.js
-Store all the constants, such as `PORT` for the server and `KEYS` for [cookie-session](https://github.com/expressjs/cookie-session)
+Store all the constants, such as `PORT` for the server and `KEYS` for [cookie-session](https://github.com/expressjs/cookie-session).
 
 ### 📜 database.js
-Store the database of urls and users
+Store the database of urls and users.
 
 ### 📜 express_server.js
 The javascript file where the server is defined.
 
 ### 📜 helpers.js
-Store all the helpers function. The functions which change the database (urls/users) are put in `userHelperGenerator` or `urlHelperGenerator` respectively. Functions that are used by other files are exported.
+Store all the helpers function.\
+Functions that change the database (urls/users) are put in `userHelperGenerator` or `urlHelperGenerator` (closure) respectively.\
+Functions that are used by other files are exported.
 
-### 📜 package-lock.json
 ### 📜 package.json
+This file contains:
+- the list of dependencies (node libraries that the executable code (and development code) needs)
+- dev-dependencies: node libraries only needed by development tools</li>
+- scripts: Define the in-project shortcut commands, therefore when we can use `npm start`, `npm test` is equivalent to calling  script value
 
 ## Features
+
+### Site Header
+if a user is logged in, the header shows:
+- the user's email
+- a logout button for logout
+
+if a user is not logged in, the header shows:
+- a link to the login page (/login)
+- a link to the registration page (/register)
