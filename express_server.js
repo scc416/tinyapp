@@ -34,16 +34,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
+  // assignVisitorIdToCookie is in all "get method" to put visitor Id into cookies if they don't have one
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
+  // truthy userInfo means user is logged in
   if (userInfo) return res.redirect("/urls");
   res.redirect("/login");
 });
 
 app.get("/urls", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   
@@ -55,7 +59,6 @@ app.get("/urls", (req, res) => {
   }
 
   const urlsOfTheUser = getURLsOfAnUser(loggedInId);
-
   const templateVars = { urls: urlsOfTheUser, userInfo };
   res.render("urls_index", templateVars);
 });
@@ -73,6 +76,8 @@ app.post("/urls", (req, res) => {
   }
 
   const { longURL } = req.body;
+
+  // this function return the shortURL after adding it and other info into the URL database
   const shortURL = generateNewShortenURL(longURL, loggedInId);
   
   res.redirect(`/urls/${shortURL}`);
@@ -80,6 +85,7 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   if (!userInfo) return res.redirect("/login");
@@ -90,9 +96,9 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/register", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
-
   if (userInfo) return res.redirect("/urls");
 
   const templateVars = { userInfo: null };

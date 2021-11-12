@@ -34,7 +34,8 @@
         <h5 class="card-title">Edit the Long URL</h5>
         <form class="form-inline justify-content-center" action="/urls/<%= shortURL %>/?_method=PUT" method="POST">
           <div class="form-group mb-2">
-            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
+            <input class="form-control" type="text" name="longURL" placeholder="http://"
+              style="width: 300px; margin: 1em">
             <button type="submit" class="btn btn-light">Submit</button>
           </div>
         </form>
@@ -46,33 +47,30 @@
         <h5 class="card-title">
           Track Visitors
         </h5>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Visitor ID</th>
-            <th scope="col">Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% 
-          const records = urlInfo.visitorRecord;
-          const numOfRecords = records.length;
-          for (let i = numOfRecords - 1; i >= 0; i --) { 
-            const record = records[i];
-            %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td>
-                <%= record.visitorId %>
-              </td>
-              <td>
-                <%= record.timestamp %>
-              </td>
+              <th scope="col">Visitor ID</th>
+              <th scope="col">Timestamp</th>
             </tr>
-            <% } %>
-        </tbody>
-      </table>
-    </div>
-    </div>
+          </thead>
+          <tbody>
+            <% const records=urlInfo.visitorRecord; const numOfRecords=records.length; for (let i=numOfRecords - 1; i>=
+              0; i --) {
+              const record = records[i];
+              %>
+              <tr>
+                <td>
+                  <%= record.visitorId %>
+                </td>
+                <td>
+                  <%= record.timestamp %>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+      </div>
     </div>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
