@@ -16,17 +16,17 @@ TinyApp is a full stack web application built with Node and Express that allows 
 ## Final Product
 
 ![urls-page.png](./docs/urls-page.png)
-*User can view all short URLs that are created by them*
+User can view all short URLs that are created by them
 
 &nbsp;  
 
 ![show-page.png](./docs/show-page.png)
-*User can view the statistics (date created, number of visits, number of unique visitors) and edit the long URL of their short URL*
+User can view the statistics (date created, number of visits, number of unique visitors) and edit the long URL of their short URL
 
 &nbsp;  
 
 ![show-page-track-visitors.png](./docs/show-page-track-visitors.png)
-*User can keep track of the visitors that visited their short URL (in desending order of time)*
+User can keep track of the visitors that visited their short URL (in desending order of time)
 
 &nbsp;  
 
