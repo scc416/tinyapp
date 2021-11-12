@@ -241,6 +241,17 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+app.get("/:wrongPath", (req, res) => {
+  assignVisitorIdToCookie(req.session);
+  const { wrongPath } = req.params;
+  const { userId: loggedInId } = req.session;
+  const userInfo = getUserInfoById(loggedInId);
+  const errMsg = `/${wrongPath} does not exist. Please check the url.`;
+  res
+    .status(404)
+    .render('urls_error', { userInfo, error: errMsg });
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
