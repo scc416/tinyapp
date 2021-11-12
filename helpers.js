@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const generateRandomChar = () => {
   const possibleChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const numOfPossibleChar = possibleChars.length;
+  
   const randomFloat = Math.random() * numOfPossibleChar;
   const randomInt = Math.floor(randomFloat);
   const randomChar = possibleChars[randomInt];
@@ -10,8 +11,8 @@ const generateRandomChar = () => {
 };
 
 const generateRandomString = () => {
-  let randomString = "";
   const lengthOfString = 6;
+  let randomString = "";
   for (let i = 0; i < lengthOfString; i++) {
     randomString += generateRandomChar();
   }
@@ -41,6 +42,7 @@ const uniqueKeyChecker = (newKey, database) => {
   return true;
 };
 
+// function to use as method in url database object
 const uniqueVisitorsCounter = function() {
   const visitors = [];
   const visitorsRecord = this.visitorsRecord;
@@ -49,6 +51,7 @@ const uniqueVisitorsCounter = function() {
     const counted = visitors.includes(visitorId);
     if (!counted) visitors.push(visitorId);
   }
+
   const count = visitors.length;
   return count;
 };
@@ -56,6 +59,7 @@ const uniqueVisitorsCounter = function() {
 const hashPassword = password => bcrypt.hashSync(password, 10);
 const checkPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
+// closure for user database
 const userHelperGenerator = (userDatabase) => {
   
   const getUserByEmail = (email) => {
@@ -91,18 +95,15 @@ const userHelperGenerator = (userDatabase) => {
     }
   
     let id = generateRandomString();
-
     while (!uniqueKeyChecker(id, userDatabase)) {
       id = generateRandomString();
     }
 
     const hashedPassword = hashPassword(password);
-  
     const newUserInfo = { id, email, password: hashedPassword };
     userDatabase[id] = newUserInfo;
   
     return { data: id, err: null };
-  
   };
 
   const authenticateUser = (emailInput, passwordInput) => {
@@ -110,6 +111,7 @@ const userHelperGenerator = (userDatabase) => {
     if (!userId) {
       return { data: null, err: "The email address is not registered" };
     }
+
     const userInfo = getUserInfoById(userId);
     const { password } = userInfo;
     const passwordIsCorrect = checkPassword(passwordInput, password);
@@ -117,17 +119,19 @@ const userHelperGenerator = (userDatabase) => {
     if (!passwordIsCorrect) {
       return { data: null, err: "The password doesn't match with the email address." };
     }
+
     return { data: userId, err: null };
   };
 
   return { getUserByEmail, getUserInfoById, getIdForNewUser, authenticateUser };
 };
 
+// closure for urls database
 const urlHelperGenerator = (urlDatabase) => {
 
   const makeVisitorRecords = (shortURL, visitorId) => {
     const record = { visitorId, timestamp: createDateString() };
-    const visitorRecord = urlDatabase[shortURL].visitorsRecord;
+    const { visitorRecord } = urlDatabase[shortURL];
     visitorRecord.push(record);
   };
 
@@ -170,12 +174,17 @@ const urlHelperGenerator = (urlDatabase) => {
     return shortURL;
   };
 
+  // parameter getUserInfoById is a function
+  // it is passed in to check the userId with the user database
+  // meanwhile, this function (checkIfURLBelongsToUser) itself deal with the url database
   const checkIfURLBelongsToUser = (info, getUserInfoById) => {
     const { userId, shortURL, errMsgForNotLoggedIn, errMsgForURLNotBelongToUser } = info;
+    
     const userInfo = getUserInfoById(userId);
     if (!userInfo) {
       return { data: null, err: errMsgForNotLoggedIn };
     }
+
     const urlInfo = urlDatabase[shortURL];
     if (!urlInfo) {
       return { data: null, err: "This shorten url does not exist." };
