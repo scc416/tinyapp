@@ -22,7 +22,7 @@ const { getURLInfoByShortURL: getURLInfoByShortURLWithNoURLs } = urlHelperGenera
 describe("#getURLInfoByShortURL", function() {
   it("should return a object of url info with valid shortURL", function() {
     const result = getURLInfoByShortURLWithTestURLs("b6UTxQ");
-    const expectedResult = { 
+    const expectedResult = {
       data: {
         longURL: "https://protonmail.com/",
         userId: "a1234F",
@@ -36,7 +36,7 @@ describe("#getURLInfoByShortURL", function() {
 
   it("should return an error with invalid shortURL", function() {
     const result = getURLInfoByShortURLWithTestURLs("XXXXXX");
-    const expectedResult = { 
+    const expectedResult = {
       data: null,
       err: "This short URL does not exist."
     };
@@ -45,7 +45,7 @@ describe("#getURLInfoByShortURL", function() {
 
   it("should return an error with no url in database", function() {
     const result = getURLInfoByShortURLWithNoURLs("a1234F");
-    const expectedResult = { 
+    const expectedResult = {
       data: null,
       err: "This short URL does not exist."
     };

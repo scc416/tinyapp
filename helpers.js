@@ -26,7 +26,7 @@ const createDateString = () => {
   };
   const dateString = date.toLocaleString('en-US', options);
   return dateString;
-}
+};
 
 const assignVisitorIdToCookie = (cookie) => {
   const { visitorId } = cookie;
