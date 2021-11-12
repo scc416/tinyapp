@@ -175,6 +175,7 @@ if the path does not exist, the page shows an error message
 📦tinyapp
  ┣ 📂docs
  ┣ 📂test
+ ┃ ┣ 📜assignVisitorIdToCookie_test.js
  ┃ ┣ 📜authenticateUser_test.js
  ┃ ┣ 📜checkIfURLBelongsToUser_test.js
  ┃ ┣ 📜deleteURL_test.js
