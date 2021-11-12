@@ -18,11 +18,11 @@
           TinyURL for: <%= urlInfo.longURL %>
         </h5>
         <p class="card-text">Short URL:
-          <a href="/u/<%= shortURL %>">
+          <a href="/u/<%= shortURL %>" target="_blank">
             <%= shortURL %>
           </a>
         </p>
-        <a href="/u/<%= shortURL %>" class="btn btn-primary">Visit the short URL</a>
+        <a href="/u/<%= shortURL %>" class="btn btn-primary" target="_blank">Visit the short URL</a>
       </div>
       <div class="card-footer text-muted">
         <b>Visited <%= urlInfo.visitorRecord.length %> time(s) by <%= urlInfo.numOfUniqueVisitors() %> visitor(s)</b>

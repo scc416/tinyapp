@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const { PORT, KEYS } = require("./constants.js");
+
+// all functions that involve url/user database are put into closure: userHelperGenerator, urlHelperGenerator
 const { userHelperGenerator, urlHelperGenerator, assignVisitorIdToCookie } = require("./helpers.js");
 const { userDatabase, urlDatabase } = require("./database.js");
 const methodOverride = require('method-override');
@@ -34,7 +36,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  // assignVisitorIdToCookie is in all "get method" to put visitor Id into cookies if they don't have one
+  // assignVisitorIdToCookie is in all "get method"
+  // it put visitor Id into cookies if cookie doesn't have one yet
   assignVisitorIdToCookie(req.session);
 
   const { userId: loggedInId } = req.session;
@@ -101,11 +104,20 @@ app.get("/register", (req, res) => {
   const userInfo = getUserInfoById(loggedInId);
   if (userInfo) return res.redirect("/urls");
 
-  const templateVars = { userInfo: null };
+  const templateVars = { userInfo };
   res.render("urls_register", templateVars);
 });
 
 app.post("/register", (req, res) => {
+  const { userId: loggedInId } = req.session;
+  const userInfo = getUserInfoById(loggedInId);
+  if (userInfo) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error: "Logout to register" }));
+  }
+
   const { email: emailInput, password: passwordInput } = req.body;
 
   const result = getIdForNewUser(emailInput, passwordInput);
@@ -115,7 +127,7 @@ app.post("/register", (req, res) => {
     return (
       res
         .status(400)
-        .render('urls_error', { userInfo: null, error }));
+        .render('urls_error', { userInfo, error }));
   }
   
   const { data: userId } = result;
@@ -125,6 +137,7 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
@@ -135,6 +148,15 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  const { userId: loggedInId } = req.session;
+  const userInfo = getUserInfoById(loggedInId);
+  if (userInfo) {
+    return (
+      res
+        .status(400)
+        .render('urls_error', { userInfo, error: "You are already logged in." }));
+  }
+
   const { email: emailInput, password: passwordInput } = req.body;
   const result = authenticateUser(emailInput, passwordInput);
 
@@ -156,7 +178,12 @@ app.delete("/urls/:shortURL/", (req, res) => {
   const { shortURL } = req.params;
   const errMsgForNotLoggedIn = "You have to login to delete url.";
   const errMsgForURLNotBelongToUser = "You cannot delete url of another user.";
-  const infoToDeleteURL = { userId: loggedInId, shortURL, errMsgForNotLoggedIn, errMsgForURLNotBelongToUser };
+  const infoToDeleteURL = {
+    shortURL,
+    errMsgForNotLoggedIn,
+    errMsgForURLNotBelongToUser,
+    userId: loggedInId
+  };
   const result = checkIfURLBelongsToUser(infoToDeleteURL, getUserInfoById);
   
   const error = result.err;
@@ -177,7 +204,12 @@ app.put("/urls/:shortURL", (req, res) => {
   const errMsgForNotLoggedIn = "You have to login to edit url.";
   const errMsgForURLNotBelongToUser = "You cannot edit url of another user.";
   const { shortURL } = req.params;
-  const infoToEditURL = { userId: loggedInId, shortURL, errMsgForNotLoggedIn, errMsgForURLNotBelongToUser };
+  const infoToEditURL = {
+    shortURL,
+    errMsgForNotLoggedIn,
+    errMsgForURLNotBelongToUser,
+    userId: loggedInId
+  };
   const result = checkIfURLBelongsToUser(infoToEditURL, getUserInfoById);
   
   const error = result.err;
@@ -201,12 +233,18 @@ app.post("/logout", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { userId: loggedInId } = req.session;
   const errMsgForNotLoggedIn = "You have to login to edit url.";
   const errMsgForURLNotBelongToUser = "You cannot edit url of another user.";
 
   const { shortURL } = req.params;
-  const infoToViewURLDetails = { userId: loggedInId, shortURL, errMsgForNotLoggedIn, errMsgForURLNotBelongToUser };
+  const infoToViewURLDetails = {
+    shortURL,
+    errMsgForNotLoggedIn,
+    errMsgForURLNotBelongToUser,
+    userId: loggedInId
+  };
   const result = checkIfURLBelongsToUser(infoToViewURLDetails, getUserInfoById);
   
   const error = result.err;
@@ -219,6 +257,9 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 
   const { data: userInfo } = result;
+
+  // it is certain that result2 doesn't have error
+  // checkIfURLBelongsToUser has already scan for all possible errors
   const result2 = getURLInfoByShortURL(shortURL);
   const { data: urlInfo } = result2;
   const templateVars = { shortURL, urlInfo, userInfo };
@@ -227,12 +268,12 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { shortURL } = req.params;
   const { visitorId } = req.session;
   const result = getURLInfoByShortURL(shortURL);
 
   const errMsg = result.err;
-
   if (errMsg) {
     const { userId: loggedInId } = req.session;
     const userInfo = getUserInfoById(loggedInId);
@@ -249,6 +290,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/:wrongPath", (req, res) => {
   assignVisitorIdToCookie(req.session);
+
   const { wrongPath } = req.params;
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
