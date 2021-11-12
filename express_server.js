@@ -115,7 +115,7 @@ app.post("/register", (req, res) => {
     return (
       res
         .status(400)
-        .render('urls_error', { userInfo, error: "Logout to register" }));
+        .render('urls_error', { userInfo, error: "Logout to create account." }));
   }
 
   const { email: emailInput, password: passwordInput } = req.body;
