@@ -1,18 +1,5 @@
 const { assert } = require("chai");
-const { userHelperGenerator, urlHelperGenerator, uniqueVisitorsCounter } = require("../helpers.js");
-
-const testUsers = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
-  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-};
+const { urlHelperGenerator, uniqueVisitorsCounter } = require("../helpers.js");
 
 const testURLs = {
   b6UTxQ: {
@@ -29,60 +16,24 @@ const testURLs = {
   }
 };
 
-const { checkIfURLBelongsToUser: checkIfURLBelongsToUserWithTestURLs } = urlHelperGenerator(testURLs);
-const { checkIfURLBelongsToUser: checkIfURLBelongsToUserWithNoURLs } = urlHelperGenerator({});
-const { getUserInfoById: getUserInfoByIdWithTestUsers } = userHelperGenerator(testUsers);
+const { makeVisitorRecords: makeVisitorRecordsWithTestURLs } = urlHelperGenerator(testURLs);
 
 describe("#checkIfURLBelongsToUser", function() {
-  it("should return error with invalid userId", function() {
-    const info = { userId: undefined, errMsgForNotLoggedIn: "NOT LOGGED IN" };
-    const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = { data: null, err: "NOT LOGGED IN" };
-    assert.deepStrictEqual(result, expectedResult);
+  
+  const shortURL = "b6UTxQ";
+  const visitorId = "visitor";
+  makeVisitorRecordsWithTestURLs(shortURL, visitorId);
+
+  it("the length of visitors should increase by 1 after function is called", function() {
+    const result = testURLs[shortURL].visitorsRecord.length;
+    const expectedResult = 1;
+    assert.strictEqual(result, expectedResult);
   });
 
-  it("should return error with invalid userId (empty url database)", function() {
-    const info = { userId: undefined, errMsgForNotLoggedIn: "NOT LOGGED IN" };
-    const result = checkIfURLBelongsToUserWithNoURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = { data: null, err: "NOT LOGGED IN" };
-    assert.deepStrictEqual(result, expectedResult);
+  it("the visitorId should match with the input visitorId", function() {
+    const result = testURLs[shortURL].visitorsRecord[0].visitorId;
+    const expectedResult = visitorId;
+    assert.strictEqual(result, expectedResult);
   });
 
-  it("should return error with invalid shortURL", function() {
-    const info = { userId: "userRandomID", shortURL: "xxxxxx" };
-    const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = { data: null, err: "This shorten url does not exist." };
-    assert.deepStrictEqual(result, expectedResult);
-  });
-
-  it("should return error with invalid shortURL (empty url database)", function() {
-    const info = { userId: "userRandomID", shortURL: "xxxxxx" };
-    const result = checkIfURLBelongsToUserWithNoURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = { data: null, err: "This shorten url does not exist." };
-    assert.deepStrictEqual(result, expectedResult);
-  });
-
-  it("should return error when the shortURL does not belong to the user", function() {
-    const info = {
-      userId: "user2RandomID",
-      shortURL: "b6UTxQ",
-      errMsgForURLNotBelongToUser: "URL DOES NOT BELONG TO USER"};
-    const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = { data: null, err: "URL DOES NOT BELONG TO USER" };
-    assert.deepStrictEqual(result, expectedResult);
-  });
-
-  it("should return user info with valid information", function() {
-    const info = { userId: "userRandomID", shortURL: "b6UTxQ"};
-    const result = checkIfURLBelongsToUserWithTestURLs(info, getUserInfoByIdWithTestUsers);
-    const expectedResult = {
-      data: {
-        id: "userRandomID",
-        email: "user@example.com",
-        password: "purple-monkey-dinosaur"
-      },
-      err: null
-    };
-    assert.deepStrictEqual(result, expectedResult);
-  });
 });

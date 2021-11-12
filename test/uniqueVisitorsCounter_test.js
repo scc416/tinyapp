@@ -25,16 +25,16 @@ const testUrlInfo2 = {
 };
 
 describe("#uniqueVisitorsCounter", function() {
-  it("should return correct number of unique visitors", function() {
+  it("should return the number of unique visitors", function() {
     const result = testUrlInfo.numOfUniqueVisitors();
     const expectedResult = 4;
-    assert.deepStrictEqual(result, expectedResult);
+    assert.strictEqual(result, expectedResult);
   });
 
   it("should return 0 with empty record", function() {
     const result = testUrlInfo2.numOfUniqueVisitors();
     const expectedResult = 0;
-    assert.deepStrictEqual(result, expectedResult);
+    assert.strictEqual(result, expectedResult);
   });
 
 });

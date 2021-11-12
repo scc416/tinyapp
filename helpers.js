@@ -131,8 +131,8 @@ const urlHelperGenerator = (urlDatabase) => {
 
   const makeVisitorRecords = (shortURL, visitorId) => {
     const record = { visitorId, timestamp: createDateString() };
-    const { visitorRecord } = urlDatabase[shortURL];
-    visitorRecord.push(record);
+    const { visitorsRecord } = urlDatabase[shortURL];
+    visitorsRecord.push(record);
   };
 
   const getURLsOfAnUser = (id) => {
