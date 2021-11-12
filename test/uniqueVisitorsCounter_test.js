@@ -5,7 +5,7 @@ const testUrlInfo = {
   longURL: "https://protonmail.com/",
   userId: "aJ48lW",
   dateCreated: "2021-11-11",
-  visitorsRecord: [
+  visitorRecord: [
     { visitorId: "AAAAAA", timestamp: "2021/11/11" },
     { visitorId: "BBBBBB", timestamp: "2021/11/11" },
     { visitorId: "BBBBBB", timestamp: "2021/11/11" },
@@ -20,7 +20,7 @@ const testUrlInfo2 = {
   longURL: "https://protonmail.com/",
   userId: "aJ48lW",
   dateCreated: "2021-11-11",
-  visitorsRecord: [],
+  visitorRecord: [],
   numOfUniqueVisitors: uniqueVisitorsCounter
 };
 

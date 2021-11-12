@@ -45,8 +45,8 @@ const uniqueKeyChecker = (newKey, database) => {
 // function to use as method in url database object
 const uniqueVisitorsCounter = function() {
   const visitors = [];
-  const visitorsRecord = this.visitorsRecord;
-  for (const record of visitorsRecord) {
+  const visitorRecord = this.visitorRecord;
+  for (const record of visitorRecord) {
     const visitorId = record.visitorId;
     const counted = visitors.includes(visitorId);
     if (!counted) visitors.push(visitorId);
@@ -131,8 +131,8 @@ const urlHelperGenerator = (urlDatabase) => {
 
   const makeVisitorRecords = (shortURL, visitorId) => {
     const record = { visitorId, timestamp: createDateString() };
-    const { visitorsRecord } = urlDatabase[shortURL];
-    visitorsRecord.push(record);
+    const { visitorRecord } = urlDatabase[shortURL];
+    visitorRecord.push(record);
   };
 
   const getURLsOfAnUser = (id) => {
@@ -165,7 +165,7 @@ const urlHelperGenerator = (urlDatabase) => {
     const urlInfo = {
       longURL,
       userId,
-      visitorsRecord: [],
+      visitorRecord: [],
       dateCreated: createDateString(),
       numOfUniqueVisitors: uniqueVisitorsCounter
     };

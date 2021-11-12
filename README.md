@@ -164,7 +164,7 @@ if email already exists, the page shows an error message
 
 &nbsp;  
 
-### All other (undefined) paths
+### All unspecified paths
 ![error-path-not-exist.png](./docs/error-path-not-exist.png)
 if the path does not exist, the page shows an error message
 

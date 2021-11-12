@@ -25,7 +25,7 @@
         <a href="/u/<%= shortURL %>" class="btn btn-primary">Visit the short URL</a>
       </div>
       <div class="card-footer text-muted">
-        <b>Visited <%= urlInfo.visitorsRecord.length %> time(s) by <%= urlInfo.numOfUniqueVisitors() %> visitor(s)</b>
+        <b>Visited <%= urlInfo.visitorRecord.length %> time(s) by <%= urlInfo.numOfUniqueVisitors() %> visitor(s)</b>
       </div>
     </div>
 
@@ -55,7 +55,7 @@
         </thead>
         <tbody>
           <% 
-          const records = urlInfo.visitorsRecord;
+          const records = urlInfo.visitorRecord;
           const numOfRecords = records.length;
           for (let i = numOfRecords - 1; i >= 0; i --) { 
             const record = records[i];

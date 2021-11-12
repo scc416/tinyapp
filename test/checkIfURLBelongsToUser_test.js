@@ -18,13 +18,13 @@ const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "userRandomID",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "userRandomID",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };

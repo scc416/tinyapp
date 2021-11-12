@@ -5,14 +5,14 @@ const urlDatabase = {
     longURL: "https://protonmail.com/",
     userId: "aJ48lW",
     dateCreated: createDateString(),
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "aJ48lW",
     dateCreated: createDateString(),
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };

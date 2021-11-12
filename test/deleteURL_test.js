@@ -5,13 +5,13 @@ const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "a1234F",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "a1234F",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
@@ -25,7 +25,7 @@ describe("#deleteURL", function() {
       b6UTxQ: {
         longURL: "https://protonmail.com/",
         userId: "a1234F",
-        visitorsRecord: [],
+        visitorRecord: [],
         numOfUniqueVisitors: uniqueVisitorsCounter
       }
     };

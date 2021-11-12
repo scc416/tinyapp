@@ -5,13 +5,13 @@ const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "a1234F",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "a1234F",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
@@ -26,7 +26,7 @@ describe("#getURLInfoByShortURL", function() {
       data: {
         longURL: "https://protonmail.com/",
         userId: "a1234F",
-        visitorsRecord: [],
+        visitorRecord: [],
         numOfUniqueVisitors: uniqueVisitorsCounter
       },
       err: null

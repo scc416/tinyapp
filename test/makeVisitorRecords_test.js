@@ -5,13 +5,13 @@ const testURLs = {
   b6UTxQ: {
     longURL: "https://protonmail.com/",
     userId: "userRandomID",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   },
   i3BoGr: {
     longURL: "https://slack.com/",
     userId: "userRandomID",
-    visitorsRecord: [],
+    visitorRecord: [],
     numOfUniqueVisitors: uniqueVisitorsCounter
   }
 };
@@ -25,13 +25,13 @@ describe("#checkIfURLBelongsToUser", function() {
   makeVisitorRecordsWithTestURLs(shortURL, visitorId);
 
   it("the length of visitors should increase by 1 after function is called", function() {
-    const result = testURLs[shortURL].visitorsRecord.length;
+    const result = testURLs[shortURL].visitorRecord.length;
     const expectedResult = 1;
     assert.strictEqual(result, expectedResult);
   });
 
   it("the visitorId should match with the input visitorId", function() {
-    const result = testURLs[shortURL].visitorsRecord[0].visitorId;
+    const result = testURLs[shortURL].visitorRecord[0].visitorId;
     const expectedResult = visitorId;
     assert.strictEqual(result, expectedResult);
   });
