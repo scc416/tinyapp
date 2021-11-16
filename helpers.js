@@ -180,14 +180,14 @@ const urlHelperGenerator = (urlDatabase) => {
   const checkIfURLBelongsToUser = (info, getUserInfoById) => {
     const { userId, shortURL, errMsgForNotLoggedIn, errMsgForURLNotBelongToUser } = info;
     
-    const userInfo = getUserInfoById(userId);
-    if (!userInfo) {
-      return { data: null, err: errMsgForNotLoggedIn };
-    }
-
     const urlInfo = urlDatabase[shortURL];
     if (!urlInfo) {
       return { data: null, err: "This shorten url does not exist." };
+    }
+    
+    const userInfo = getUserInfoById(userId);
+    if (!userInfo) {
+      return { data: null, err: errMsgForNotLoggedIn };
     }
   
     const { userId: urlUserId } = urlInfo;
