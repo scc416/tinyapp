@@ -107,9 +107,14 @@ const userHelperGenerator = (userDatabase) => {
   };
 
   const authenticateUser = (emailInput, passwordInput) => {
+    const someInfoIsEmpty = emailInput === "" || passwordInput === "";
+    if (someInfoIsEmpty) {
+      return { data: null, err: "Please fill in email address and password." };
+    }
+
     const userId = getUserByEmail(emailInput);
     if (!userId) {
-      return { data: null, err: "The email address is not registered" };
+      return { data: null, err: "The email address is not registered." };
     }
 
     const userInfo = getUserInfoById(userId);
@@ -184,7 +189,7 @@ const urlHelperGenerator = (urlDatabase) => {
     if (!urlInfo) {
       return { data: null, err: "This shorten url does not exist." };
     }
-    
+
     const userInfo = getUserInfoById(userId);
     if (!userInfo) {
       return { data: null, err: errMsgForNotLoggedIn };
