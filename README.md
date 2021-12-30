@@ -10,6 +10,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - [Getting Started](#getting-started)
 - [Features](#features)
 - [File Structure](#file-structure)
+- [Credit](#credit)
 
 &nbsp;  
 
@@ -245,3 +246,6 @@ This file contains:
 - the list of dependencies (node libraries that the executable code (and development code) needs)
 - dev-dependencies: node libraries only needed by development tools</li>
 - scripts: Define the in-project shortcut commands, therefore when we can use `npm start`, `npm test` is equivalent to calling  script value
+
+## Credit
+- [Favicons](https://www.flaticon.com/free-icon/slave_6437000) made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/)

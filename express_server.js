@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const { PORT, KEYS } = require("./constants.js");
+const favicon = require("serve-favicon");
+const path = require('path');
 
 // all functions that involve url/user database are put into closure: userHelperGenerator, urlHelperGenerator
 const { userHelperGenerator, urlHelperGenerator, assignVisitorIdToCookie } = require("./helpers.js");
@@ -25,6 +27,8 @@ const {
 const app = express();
 
 //Middleware
+app.use(favicon(path.join(__dirname, "public", "favicon.png")));
+
 app.use(cookieSession({
   keys: KEYS
 }));
