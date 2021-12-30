@@ -39,6 +39,7 @@ User can keep track of the visitors that visited their short URL (in desending o
 - [bcrypt](https://github.com/dcodeIO/bcrypt.js)
 - [body-parser](https://github.com/expressjs/body-parser)
 - [cookie-session](https://github.com/expressjs/cookie-session)
+- [serve-favicon](https://github.com/expressjs/serve-favicon)
 
 &nbsp;  
 
