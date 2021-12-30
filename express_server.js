@@ -2,13 +2,16 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const { PORT, KEYS } = require("./constants.js");
-const favicon = require("serve-favicon");
-const path = require('path');
+const path = require("path");
 
 // all functions that involve url/user database are put into closure: userHelperGenerator, urlHelperGenerator
-const { userHelperGenerator, urlHelperGenerator, assignVisitorIdToCookie } = require("./helpers.js");
+const {
+  userHelperGenerator,
+  urlHelperGenerator,
+  assignVisitorIdToCookie,
+} = require("./helpers.js");
 const { userDatabase, urlDatabase } = require("./database.js");
-const methodOverride = require('method-override');
+const methodOverride = require("method-override");
 
 const { getUserInfoById, getIdForNewUser, authenticateUser } =
   userHelperGenerator(userDatabase);
@@ -21,21 +24,22 @@ const {
   checkIfURLBelongsToUser,
   getURLInfoByShortURL,
   makeVisitorRecords,
-} =
-  urlHelperGenerator(urlDatabase);
+} = urlHelperGenerator(urlDatabase);
 
 const app = express();
 
 //Middleware
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(
+  cookieSession({
+    keys: KEYS,
+  })
+);
 
-app.use(cookieSession({
-  keys: KEYS
-}));
+app.use(methodOverride("_method"));
 
-app.use(methodOverride('_method'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.set("view engine", "ejs");
 
@@ -57,12 +61,14 @@ app.get("/urls", (req, res) => {
 
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
-  
+
   if (!userInfo) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error: "Login to see your shorten URLs." }));
+    return res
+      .status(400)
+      .render("urls_error", {
+        userInfo,
+        error: "Login to see your shorten URLs.",
+      });
   }
 
   const urlsOfTheUser = getURLsOfAnUser(loggedInId);
@@ -71,22 +77,20 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
 
   if (!userInfo) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error: "Login to create new url." }));
+    return res
+      .status(400)
+      .render("urls_error", { userInfo, error: "Login to create new url." });
   }
 
   const { longURL } = req.body;
 
   // this function return the shortURL after adding it and other info into the URL database
   const shortURL = generateNewShortenURL(longURL, loggedInId);
-  
+
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -116,10 +120,9 @@ app.post("/register", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   if (userInfo) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error: "Logout to create account." }));
+    return res
+      .status(400)
+      .render("urls_error", { userInfo, error: "Logout to create account." });
   }
 
   const { email: emailInput, password: passwordInput } = req.body;
@@ -128,12 +131,9 @@ app.post("/register", (req, res) => {
 
   const error = result.err;
   if (error) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error }));
+    return res.status(400).render("urls_error", { userInfo, error });
   }
-  
+
   const { data: userId } = result;
   req.session.userId = userId;
   res.redirect("/urls");
@@ -155,10 +155,9 @@ app.post("/login", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   if (userInfo) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error: "You are already logged in." }));
+    return res
+      .status(400)
+      .render("urls_error", { userInfo, error: "You are already logged in." });
   }
 
   const { email: emailInput, password: passwordInput } = req.body;
@@ -166,10 +165,7 @@ app.post("/login", (req, res) => {
 
   const error = result.err;
   if (error) {
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo: null, error }));
+    return res.status(400).render("urls_error", { userInfo: null, error });
   }
 
   const { data: userId } = result;
@@ -186,17 +182,14 @@ app.delete("/urls/:shortURL/", (req, res) => {
     shortURL,
     errMsgForNotLoggedIn,
     errMsgForURLNotBelongToUser,
-    userId: loggedInId
+    userId: loggedInId,
   };
   const result = checkIfURLBelongsToUser(infoToDeleteURL, getUserInfoById);
-  
+
   const error = result.err;
   if (error) {
     const userInfo = getUserInfoById(loggedInId);
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error }));
+    return res.status(400).render("urls_error", { userInfo, error });
   }
 
   deleteURL(shortURL);
@@ -212,17 +205,14 @@ app.put("/urls/:shortURL", (req, res) => {
     shortURL,
     errMsgForNotLoggedIn,
     errMsgForURLNotBelongToUser,
-    userId: loggedInId
+    userId: loggedInId,
   };
   const result = checkIfURLBelongsToUser(infoToEditURL, getUserInfoById);
-  
+
   const error = result.err;
   if (error) {
     const userInfo = getUserInfoById(loggedInId);
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error }));
+    return res.status(400).render("urls_error", { userInfo, error });
   }
 
   const { longURL: newLongURL } = req.body;
@@ -247,17 +237,14 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL,
     errMsgForNotLoggedIn,
     errMsgForURLNotBelongToUser,
-    userId: loggedInId
+    userId: loggedInId,
   };
   const result = checkIfURLBelongsToUser(infoToViewURLDetails, getUserInfoById);
-  
+
   const error = result.err;
   if (error) {
     const userInfo = getUserInfoById(loggedInId);
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error }));
+    return res.status(400).render("urls_error", { userInfo, error });
   }
 
   const { data: userInfo } = result;
@@ -281,10 +268,7 @@ app.get("/u/:shortURL", (req, res) => {
   if (errMsg) {
     const { userId: loggedInId } = req.session;
     const userInfo = getUserInfoById(loggedInId);
-    return (
-      res
-        .status(400)
-        .render('urls_error', { userInfo, error: errMsg }));
+    return res.status(400).render("urls_error", { userInfo, error: errMsg });
   }
 
   const { longURL } = result.data;
@@ -298,9 +282,7 @@ app.get("*", (req, res) => {
   const { userId: loggedInId } = req.session;
   const userInfo = getUserInfoById(loggedInId);
   const errMsg = `This path does not exist. Please check the url.`;
-  res
-    .status(404)
-    .render('urls_error', { userInfo, error: errMsg });
+  res.status(404).render("urls_error", { userInfo, error: errMsg });
 });
 
 app.listen(PORT, () => {
