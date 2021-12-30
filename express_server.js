@@ -27,7 +27,7 @@ const {
 const app = express();
 
 //Middleware
-app.use(favicon(path.join(__dirname, "public", "favicon.png")));
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 app.use(cookieSession({
   keys: KEYS
