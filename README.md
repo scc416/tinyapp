@@ -4,12 +4,21 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Table of Content
 
+- [Live Demo](#live-demo)
 - [Final Product](#final-product)
 - [Dependencies](#dependencies)
 - [Getting Started](#getting-started)
 - [Features](#features)
 - [File Structure](#file-structure)
 - [Credit](#credit)
+
+## Live Demo
+
+This project is deployed to [Heroku](https://heroku.com/):
+
+https://the-tinyapp.herokuapp.com/
+
+It might take some time to load up the server.
 
 ## Final Product
 
